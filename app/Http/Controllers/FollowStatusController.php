@@ -2,63 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class FollowStatusController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function followUser(Request $request, $userId)
+{
+    $userToFollow = User::findOrFail($userId);
+    $authUser = auth()->user();
+    $currentUser = User::find($authUser->id);
+
+    if ($currentUser->isFollowing($userToFollow)) 
     {
-        //
+        $currentUser->unfollow($userToFollow);
+    } 
+    else 
+    {
+        $currentUser->follow($userToFollow);
+
+        if ($userToFollow->isFollowing($currentUser)) 
+        {
+            $userToFollow->follow($currentUser);
+        }
+    }
+    return redirect()->back();
+}
+
+public function followCount(string $id)
+ {
+    $user = User::withCount('posts')->find($id);
+
+    if (!$user) 
+    {
+        return redirect()->route('users.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    $followersCount = $user->followers()->count();
+    $followingCount = $user->followings()->count();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    return compact('followersCount', 'followingCount');
+ }
 }
