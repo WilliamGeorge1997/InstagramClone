@@ -11,7 +11,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        // $posts = Post::find(93);
+        // $media = Post_Media::where("post_id",$posts->id)->get();
+        $post = Post::with('media','tag')->get();
+        $tag = Tag::find($post->tag->first()->tag_id);
+        // $post->setAttribute('tags', $tag);
+        dd($post);
+        return view('posts.index', ['posts' => $post]);
     }
 
     /**
@@ -19,7 +25,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
