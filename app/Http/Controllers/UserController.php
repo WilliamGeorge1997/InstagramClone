@@ -48,14 +48,16 @@ class UserController extends Controller
      */
 
 
-    public function show(string $id)
-    {
-        $user = User::find($id);
-        if (auth()->id() == $user->id) {
-            $profileInfo = Profile::where('user_id', $id)->get();
-            return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo]);
-        }
-    }
+     public function show(string $id)
+     {
+         $user = User::find($id);
+        // if (auth()->id() == $user->id) {
+             $profileInfo = Profile::where('user_id', $id)->get();
+             $followController = app(FollowStatusController::class);
+             $followCountData = $followController->followCount($user->id);
+             return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo, 'followCountData'=>$followCountData]);
+      // } 
+     }
 
     /**
      * Show the form for editing the specified resource.
