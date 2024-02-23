@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Profile;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailVerification;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -55,6 +56,10 @@ class RegisteredUserController extends Controller
             ]
         );
         event(new Registered($user, $profileInfo));
+
+        if (!$user->hasVerifiedEmail()) {
+            dispatch(new SendEmailVerification($user));
+            }
 
         Auth::login($user);
 
