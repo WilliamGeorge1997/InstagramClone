@@ -54,10 +54,7 @@ class UserController extends Controller
         if (auth()->id() == $user->id) {
             $profileInfo = Profile::where('user_id', $id)->get();
             return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo]);
-
-    public function show(string $id)
-    {
-
+        }
     }
 
     /**
@@ -72,9 +69,6 @@ class UserController extends Controller
             $profileInfo = Profile::where('user_id', $id)->get();
             return view('users.edit', ['user' => $user, 'profileInfo' => $profileInfo]);
         }
-    }
-
-        //
     }
 
     /**
@@ -109,3 +103,4 @@ class UserController extends Controller
         //
     }
 }
+
