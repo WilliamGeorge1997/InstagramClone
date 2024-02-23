@@ -24,7 +24,6 @@ class PostController extends Controller
         // $post->setAttribute('tags', $tag);
         dd($post);
         return view('posts.index', ['posts' => $post]);
-
     }
 
     /**
@@ -32,6 +31,7 @@ class PostController extends Controller
      */
     public function create()
     {
+        return view('posts.create');
     }
 
     /**
