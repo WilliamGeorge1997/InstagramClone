@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Profile;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -31,18 +32,29 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'fullname' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'lowercase', 'string', 'max:255', 'unique:' . User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'phone' => ['string', 'max:15'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'fullname' => $request->fullname,
+            'username' => $request->username,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
+        $profileInfo = Profile::create(
+            [
+                'user_id' => $user->id,
+                'gender' => "male",
+                // 'avatar'=> $request->avatar,
+            ]
+        );
+        event(new Registered($user, $profileInfo));
 
         Auth::login($user);
 
