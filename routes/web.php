@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FollowStatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
 
-Route::get('/posts', [PostController::class, 'index']) ->name('posts.index');
+Route::resource('posts',PostController::class);
+
+// Route::get('/userprofile', [UserController::class, 'index'])->name('userprofile.index');
+
+Route::resource('users', UserController::class);
+
+Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
+Route::delete('/users/{user}/unfollow', [FollowStatusController::class , 'followUser'])->name('users.unfollow');
+
+require __DIR__ . '/auth.php';

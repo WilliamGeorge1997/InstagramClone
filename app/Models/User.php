@@ -2,16 +2,20 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+//use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Overtrue\LaravelFollow\Traits\Follower;
+use Overtrue\LaravelFollow\Traits\Followable;
+use Overtrue\LaravelLike\Traits\Liker;
+
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, Follower, Followable, Liker;
 
     /**
      * The attributes that are mass assignable.
@@ -62,7 +66,7 @@ class User extends Authenticatable
     public function like_comments(){
         return $this->hasMany(Like_Comment::class);
     }
-    
+
     public function like_posts(){
         return $this->hasMany(Like_Post::class);
     }

@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Overtrue\LaravelLike\Traits\Likeable;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, Likeable;
 
     protected $fillable = [
         'user_id',
@@ -19,13 +20,15 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function posts_media(){
+    public function media(){
         return $this->hasMany(Post_Media::class);
     }
+    // public function tag(){
+    //     return $this->hasMany(Tag::class);
+    // }
     public function tag(){
-        return $this->hasMany(Tag::class);
+        return $this->hasMany(Posts_tag::class);
     }
-
     public function like_posts() {
         return $this->hasMany(Like_Post::class);
     }
