@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use Illuminate\Http\Request;
-use App\Models\Post_Media;
-use App\Models\Posts_tag;
 use App\Models\Tag;
+use App\Models\Post;
+use App\Models\Posts_tag;
+use App\Models\Post_Media;
+use Illuminate\Http\Request;
 
+use Overtrue\LaravelLike\Like;
 use function PHPUnit\Framework\isEmpty;
 
 class PostController extends Controller
@@ -22,8 +23,10 @@ class PostController extends Controller
         $post = Post::with('media','tag')->get();
         $tag = Tag::find($post->tag->first()->tag_id);
         // $post->setAttribute('tags', $tag);
+        $likeController = app(Like::class);
+        $likesCountData = $likeController->likesCount();
         dd($post);
-        return view('posts.index', ['posts' => $post]);
+        return view('posts.index', ['posts' => $post, 'likesCountData' => $likesCountData]);
     }
 
     /**

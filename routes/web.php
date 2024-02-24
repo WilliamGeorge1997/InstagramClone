@@ -17,6 +17,8 @@ use App\Http\Controllers\FollowStatusController;
 |
 */
 
+
+
 Route::get('/', function () {
     return view('welcome');
 });
