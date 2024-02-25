@@ -54,12 +54,14 @@
                             <div class="  mb-3">
                                 <div class="form-floating">
 
+
                                     <select class="form-select" name="gender">
                                         <option value="">Select your gender</option>
                                         <option value="male" @if ($profileInfo->first()->gender == 'male') selected @endif>male
                                         </option>
                                         <option value="female" @if ($profileInfo->first()->gender == 'female') selected @endif>female
                                         </option>
+
 
                                     </select>
                                     <label for="floatingSelect">Gender</label>

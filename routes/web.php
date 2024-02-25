@@ -33,7 +33,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::get('posts/{tag}/tagPage', 'PostController@tagPage')->name('posts.tag');
 
+Route::get('posts/{tag}/tagPage', [PostController::class, 'tag'])->name('posts.tag');
 
 Route::resource('posts',PostController::class);
 

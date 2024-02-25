@@ -17,7 +17,7 @@
                                 <!-- Edit Profile Button -->
                                 {{-- Follow/Unfollow button --}}
 
-                            @if(auth()->check() && auth()->user()->id !== $user->id)
+                                @if(auth()->check() && auth()->user()->id !== $user->id)
                                 @if(auth()->user()->isFollowing($user))
                                     {{-- Unfollow button --}}
                                     <form action="{{ route('users.unfollow', $user->id) }}" method="post" class="d-inline">
