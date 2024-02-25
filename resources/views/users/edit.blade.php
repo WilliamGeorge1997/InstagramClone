@@ -49,7 +49,7 @@
                                 <div class="form-floating">
                                     <select class="form-select" id="floatingSelect" name="gender">
                                         <option value="male" >male</option>
-                                        <option value="female" @if($profileInfo->first()->gender == "female") 
+                                        <option value="female" @if($profileInfo->first()->gender == "female")
                                             selected @endif>female</option>
                                     </select>
                                     <label for="floatingSelect">Gender</label>

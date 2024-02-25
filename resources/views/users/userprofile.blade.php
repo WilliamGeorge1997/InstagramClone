@@ -36,30 +36,32 @@
                                 <span class="fs-4 col-4">{{ $user->username }}</span>
                                 <!-- Edit Profile Button -->
                                 {{-- Follow/Unfollow button --}}
-                                
-    @if(auth()->check() && auth()->user()->id !== $user->id)
-        @if(auth()->user()->isFollowing($user))
-            {{-- Unfollow button --}}
-            <form action="{{ route('users.unfollow', $user->id) }}" method="post" class="d-inline">
-                @csrf
-                @method('delete')
-                <button type="submit" class="btn btn-primary col-2">Unfollow</button>
-            </form>
-        @else
-            {{-- Follow/Follow Back button --}}
-            <form action="{{ route('users.follow', $user->id) }}" method="post" class="d-inline">
-                @csrf
-                <button type="submit" class="btn btn-primary col-2">
-                    @if($user->isFollowing(auth()->user()))
-                        Followed Back
-                    @else
-                        Follow
-                    @endif
-                </button>
-            </form>
-                  @endif
-                @endif
-    
+
+                                @if (auth()->check() && auth()->user()->id !== $user->id)
+                                    @if (auth()->user()->isFollowing($user))
+                                        {{-- Unfollow button --}}
+                                        <form action="{{ route('users.unfollow', $user->id) }}" method="post"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-primary col-2">Unfollow</button>
+                                        </form>
+                                    @else
+                                        {{-- Follow/Follow Back button --}}
+                                        <form action="{{ route('users.follow', $user->id) }}" method="post"
+                                            class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-primary col-2">
+                                                @if ($user->isFollowing(auth()->user()))
+                                                    Followed Back
+                                                @else
+                                                    Follow
+                                                @endif
+                                            </button>
+                                        </form>
+                                    @endif
+                                @endif
+
                                 <a href=" {{ route('users.edit', $user->id) }}" class="btn btn-primary col-2">Edit
                                     Profile</a>
                             </div>
@@ -71,17 +73,17 @@
                                 <!-- Followers, Following, Posts -->
                                 <div class="col">
                                     <!-- Followers -->
-                                    <p><strong>Followers: {{ $followCountData['followersCount']}}</strong></p>
+                                    <p><strong>Followers: {{ $followCountData['followersCount'] }}</strong></p>
                                 </div>
                                 <div class="col">
                                     <!-- Following -->
-                                 <p><strong>Following: {{ $followCountData['followingCount']}}</strong></p>
+                                    <p><strong>Following: {{ $followCountData['followingCount'] }}</strong></p>
                                 </div>
                             </div>
                         </section>
                         <!-- Bio -->
-                        <p class="m-0">{{ $profileInfo->first()->bio }}</p>
-                        <p class="m-0">{{ $profileInfo->first()->website }}</p>
+                        <p class="m-0">{{ $profileInfo->first()->bio ? $profileInfo->first()->bio : '' }}</p>
+                        <p class="m-0">{{ $profileInfo->first()->website ? $profileInfo->first()->website : '' }}</p>
                     </div>
                     <hr class="mt-3">
                 </div>
