@@ -75,11 +75,6 @@
                                     value="{{ $profileInfo->first()->website }}">
                                 <label for="floatingSelect">Enter your Website</label>
                             </div>
-
-
-
-
-
                             <input type="email" name="email">
                             <input type="submit" class="btn btn-primary" name="submit">
                         </form>
