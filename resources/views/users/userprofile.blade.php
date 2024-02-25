@@ -5,7 +5,7 @@
                     <div class="col-md-3">
                         <!-- Profile Picture -->
                         <div class="text-center">
-                            <img src="https://e0.pxfuel.com/wallpapers/41/351/desktop-wallpaper-kumpulan-luffy-smiling-luffy-smile.jpg "
+                            <img src="{{ isset($profileInfo->first()->avatar) ? asset('storage/' . $profileInfo->first()->avatar) : asset('storage/default-avatar.png')  }}"
                                 alt="Profile Picture" class="rounded-circle" style=" width: 150px; height: 150px;">
                         </div>
                     </div>

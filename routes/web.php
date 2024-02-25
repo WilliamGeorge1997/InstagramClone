@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -37,15 +38,18 @@ Route::get('posts/{tag}/tagPage', 'PostController@tagPage')->name('posts.tag');
 
 Route::get('posts/{tag}/tagPage', [PostController::class, 'tag'])->name('posts.tag');
 
-Route::resource('posts',PostController::class);
+Route::resource('posts', PostController::class);
 
+
+
+Route::post('/posts/{post}/comment', [CommentController::class, 'store'])->name('posts.comment.store');
 
 Route::resource('users', UserController::class);
 Route::post('users/{id}/block', [UserController::class, 'blockUser'])->name('users.block');
 Route::post('users/{id}/unblock', [UserController::class, 'unblockUser'])->name('users.unblock');
 
 Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
-Route::delete('/users/{user}/unfollow', [FollowStatusController::class , 'followUser'])->name('users.unfollow');
+Route::delete('/users/{user}/unfollow', [FollowStatusController::class, 'followUser'])->name('users.unfollow');
 
 Route::get('/users/{id}/followings', [FollowStatusController::class , 'followingUsers'])->name('users.followings');
 Route::get('/users/{id}/followers', [FollowStatusController::class , 'followerUsers'])->name('users.followers');

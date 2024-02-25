@@ -85,13 +85,17 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (auth()->id() == $user->id) {
+            
+            if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+                $path = $request->file('avatar')->store('avatars', 'public');
             Profile::where('user_id', $id)->update([
                 'gender' => $request->gender,
                 'website' => $request->website,
                 'bio' => $request->bio,
-                // 'avatar' => $request->avatar
+                'avatar' => $path
             ]);
-
+            }
+            
             User::where('id', $id)->update([
                 'email' => $request->email,
                 'username' => $request->username,
@@ -103,10 +107,12 @@ class UserController extends Controller
             ]);
 
             return redirect()->route('users.show', auth()->id());
-        } else {
+        } 
+        else 
+        {
             return redirect()->route('users.show', auth()->id());
         }
-    }
+        }
 
     /**
      * Remove the specified resource from storage.
@@ -116,3 +122,4 @@ class UserController extends Controller
         //
     }
 }
+
