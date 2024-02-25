@@ -53,10 +53,12 @@ class UserController extends Controller
          $user = User::find($id);
         // if (auth()->id() == $user->id) {
              $profileInfo = Profile::where('user_id', $id)->get();
+
              $followController = app(FollowStatusController::class);
              $followCountData = $followController->followCount($user->id);
+            
              return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo, 'followCountData'=>$followCountData]);
-      // } 
+      // }
      }
 
     /**
@@ -66,7 +68,7 @@ class UserController extends Controller
     {
 
         $user = User::find($id);
-        
+
         if (auth()->id() == $user->id) {
             $profileInfo = Profile::where('user_id', $id)->get();
             return view('users.edit', ['user' => $user, 'profileInfo' => $profileInfo]);
@@ -82,7 +84,7 @@ class UserController extends Controller
         // dd($request);
 
         $user = User::find($id);
-        
+
         if (auth()->id() == $user->id) {
             Profile::where('user_id', $id)->update([
                 'gender' => $request->gender,

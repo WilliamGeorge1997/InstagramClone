@@ -1,0 +1,9 @@
+.sidebar-items .item {
+    padding: 12px 10px;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+}
+
+.sidebar-items .item:hover {
+    background-color: rgba(50, 50, 50, 0.1);
+}
