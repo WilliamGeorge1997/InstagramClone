@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Profile;
 use App\Models\User;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -28,11 +27,7 @@ class UserController extends Controller
      */
     public function create()
     {
-
         return view('users.create');
-
-        //
-
     }
 
     /**
@@ -40,7 +35,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
     }
 
     /**
@@ -48,55 +42,56 @@ class UserController extends Controller
      */
 
 
-     public function show(string $id)
-     {
-         $user = User::find($id);
-        // if (auth()->id() == $user->id) {
-             $profileInfo = Profile::where('user_id', $id)->get();
-
-             $followController = app(FollowStatusController::class);
-             $followCountData = $followController->followCount($user->id);
-            
-             return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo, 'followCountData'=>$followCountData]);
-      // }
-     }
+    public function show(string $id)
+    {
+        $user = User::find($id);
+        $profileInfo = Profile::where('user_id', $id)->get();
+        $followController = app(FollowStatusController::class);
+        $followCountData = $followController->followCount($user->id);
+        return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
+    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-
         $user = User::find($id);
-
+        
         if (auth()->id() == $user->id) {
             $profileInfo = Profile::where('user_id', $id)->get();
             return view('users.edit', ['user' => $user, 'profileInfo' => $profileInfo]);
         }
     }
-
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-
-        // dd($request);
-
         $user = User::find($id);
-
+        
         if (auth()->id() == $user->id) {
             Profile::where('user_id', $id)->update([
                 'gender' => $request->gender,
                 'website' => $request->website,
                 'bio' => $request->bio,
-                'avatar' => $request->avatar
+                // 'avatar' => $request->avatar
             ]);
+
+            User::where('id', $id)->update([
+                'email' => $request->email,
+                'username' => $request->username,
+                'phone' => $request->phone,
+            ]);
+
+            User::where('id', $id)->update([
+                'password' => Hash::make($request->password),
+            ]);
+
             return redirect()->route('users.show', auth()->id());
         } else {
             return redirect()->route('users.show', auth()->id());
         }
-
     }
 
     /**
@@ -107,4 +102,3 @@ class UserController extends Controller
         //
     }
 }
-

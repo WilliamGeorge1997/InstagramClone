@@ -55,32 +55,39 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    public function profiles(){
+    public function profiles()
+    {
         return $this->hasOne(Profile::class);
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
-    public function like_comments(){
+    public function like_comments()
+    {
         return $this->hasMany(Like_Comment::class);
     }
 
-    public function like_posts(){
+    public function like_posts()
+    {
         return $this->hasMany(Like_Post::class);
     }
 
-    public function follow_status(){
+    public function follow_status()
+    {
         return $this->hasMany(Follow_Status::class);
     }
 
-    public function blocks(){
+    public function blocks()
+    {
         return $this->hasMany(Block::class);
     }
 
-    public function saved_posts(){
+
+    public function saved_posts()
+    {
         return $this->hasMany(Saved_Post::class);
     }
-
 }

@@ -37,9 +37,10 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('posts',PostController::class);
 
-// Route::get('/userprofile', [UserController::class, 'index'])->name('userprofile.index');
 
 Route::resource('users', UserController::class);
+Route::post('users/{id}/block', [UserController::class, 'blockUser'])->name('users.block');
+Route::post('users/{id}/unblock', [UserController::class, 'unblockUser'])->name('users.unblock');
 
 Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
 Route::delete('/users/{user}/unfollow', [FollowStatusController::class , 'followUser'])->name('users.unfollow');
