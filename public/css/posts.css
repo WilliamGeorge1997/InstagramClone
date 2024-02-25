@@ -1,0 +1,88 @@
+.story-header {
+    display: flex;
+    align-items: center;
+    background-color: #f7f7f7;
+}
+
+.profile-picture {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    margin-bottom: 0.3125rem;
+    object-fit: cover;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+body {
+    background-color: #fafafa;
+    margin: 0;
+    padding: 0;
+}
+
+.post-container {
+    max-width: 600px;
+    margin: 1.25rem auto;
+    border: 0.0625rem solid #ddd;
+    background-color: #fff;
+    box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    padding: 0.625rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 0.0625rem solid #ddd;
+}
+
+.profile-pic {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    margin-right: 0.625rem;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.post-image {
+    max-width: 100%;
+    height: auto;
+}
+
+.post-caption {
+    padding: 0.625rem;
+    text-align: left;
+}
+
+.likes-comments {
+    padding: 0.625rem;
+    border-top: 0.0625rem solid #ddd;
+}
+
+.like-btn,
+.comment-btn,
+.share-btn {
+    margin-right: 10px;
+    cursor: pointer;
+    color: #333;
+}
+.likes {
+    text-align: left;
+    padding: 10px 10px 0px 10px;
+}
+.comment {
+    border: none;
+    width: 100%;
+    resize: none;
+}
+.comment:focus {
+    outline: none;
+}
+.comment-container {
+    padding: 0.625rem;
+}

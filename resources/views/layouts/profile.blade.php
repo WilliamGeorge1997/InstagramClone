@@ -7,7 +7,7 @@
     <title>@yield('title') </title>
     <link rel="stylesheet" href="{{ asset("css/all.min.css") }}">
     <link rel="stylesheet" href="{{ asset("css/bootstrap.min.css") }}">
-    @yield('style')
+
 
 </head>
 <body>
@@ -20,17 +20,14 @@
                 </div>
             </div>
         {{------------------------- Main layout -------------------------}}
-            <div class="col-md-7 col-4"  >
+            <div class="col-md-10 col-4"  >
                 <div class="container">
                     <div class="row text-center" style="margin:0px 150px">
                     @yield('content')
                 </div>
                 </div>
             </div>
-            <div class="col-md-3">
 
-
-            </div>
 
         </div>
 
