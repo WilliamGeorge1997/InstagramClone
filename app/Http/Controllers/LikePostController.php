@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Overtrue\LaravelLike\Like;
+use Illuminate\Support\Facades\DB;
 
 class LikePostController extends Controller
 {
@@ -37,18 +38,13 @@ public function unlikePost($postId)
 }
 
 
-public function likesCount()
+public function getLikesCount($model)
     {
+        $likesCount = DB::table('likes')
+            ->where('likeable_id', $model->id)
+            ->where('likeable_type', get_class($model))
+            ->count();
 
-       $posts = Post::all();
-       $likesCounts = [];
-       foreach($posts as $post){
-        $likesCount = Like::all()->where('likeable_id', $post->id)
-                                ->where('likeable_type', get_class($post))
-                                ->count();
-                                $likesCounts[$post->id] = $likesCount;
-       }
-
-        return  $likesCounts;
+        return $likesCount;
     }
 }

@@ -20,13 +20,25 @@ class PostController extends Controller
     {
         // $posts = Post::find(93);
         // $media = Post_Media::where("post_id",$posts->id)->get();
-        $post = Post::with('media','tag')->get();
-        $tag = Tag::find($post->tag->first()->tag_id);
+        //$posts = Post::with('media','tag')->get();
+      // $tag = Tag::find($posts->first()->tag->first()->tag_id);
         // $post->setAttribute('tags', $tag);
-        $likeController = app(Like::class);
-        $likesCountData = $likeController->likesCount();
-        dd($post);
-        return view('posts.index', ['posts' => $post, 'likesCountData' => $likesCountData]);
+        $posts = Post::with('user', 'media', 'tags')->get();
+
+        $likeController = new LikePostController();
+
+        $likesCounts = [];
+
+        foreach ($posts as $post) {
+            $likesCounts[$post->id] = $likeController->getLikesCount($post);
+        }
+
+     //   foreach ($comments as $comment) {
+       //     $likesCounts[$comment->id] = $likeController->getLikesCount($comment);
+       // }
+       
+
+        return view('posts.index', ['posts' => $posts,'likesCountData' => $likesCounts]);
     }
 
     /**

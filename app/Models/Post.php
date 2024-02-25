@@ -23,12 +23,13 @@ class Post extends Model
     public function media(){
         return $this->hasMany(Post_Media::class);
     }
-    // public function tag(){
-    //     return $this->hasMany(Tag::class);
-    // }
-    public function tag(){
-        return $this->hasMany(Posts_tag::class);
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'posts_tags');
     }
+  /*  public function tag(){
+        return $this->hasMany(Posts_tag::class);
+    }*/
     public function like_posts() {
         return $this->hasMany(Like_Post::class);
     }

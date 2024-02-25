@@ -42,6 +42,7 @@ class UserController extends Controller
      */
 
 
+
     public function show(string $id)
     {
         $user = User::find($id);
@@ -51,12 +52,14 @@ class UserController extends Controller
         return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
         $user = User::find($id);
+
         if (auth()->id() == $user->id) {
             $profileInfo = Profile::where('user_id', $id)->get();
             return view('users.edit', ['user' => $user, 'profileInfo' => $profileInfo]);
@@ -68,6 +71,7 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $user = User::find($id);
+
         if (auth()->id() == $user->id) {
             Profile::where('user_id', $id)->update([
                 'gender' => $request->gender,

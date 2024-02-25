@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BlockController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FollowStatusController;
 
@@ -43,5 +44,14 @@ Route::post('users/{id}/unblock', [UserController::class, 'unblockUser'])->name(
 
 Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
 Route::delete('/users/{user}/unfollow', [FollowStatusController::class , 'followUser'])->name('users.unfollow');
+
+Route::get('/users/{id}/followings', [FollowStatusController::class , 'followingUsers'])->name('users.followings');
+Route::get('/users/{id}/followers', [FollowStatusController::class , 'followerUsers'])->name('users.followers');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/block/{user}', [BlockController::class, 'block'])->name('block');
+    Route::post('/unblock/{user}', [BlockController::class, 'unblock'])->name('unblock');
+});
 
 require __DIR__ . '/auth.php';
