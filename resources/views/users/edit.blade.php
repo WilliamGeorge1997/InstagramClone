@@ -3,6 +3,7 @@
         <div class="row justify-content-center mt-5">
             <div class="col-md-8">
                 <div class="card w-100">
+>>>>>>>>> Temporary merge branch 2
                     {{-- <div class="card-header">Edit Profile</div> --}}
                     <div class="card-body ">
                         <form action=" {{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
@@ -11,9 +12,10 @@
                             {{-- ! change picture  --}}
                             <div class="d-flex mb-3 justify-content-between align-items-center border rounded-2 p-2">
                                 <div class="text-center ">
-                                    <img src="https://e0.pxfuel.com/wallpapers/41/351/desktop-wallpaper-kumpulan-luffy-smiling-luffy-smile.jpg "
-                                        alt="Profile Picture" class="rounded-circle" style=" width: 75px; height: 75px;">
-                                    <span class="ms-2 fs-5 fw-bold">{{ $user->username }}</span>
+                                    <img src="{{ isset($profileInfo->first()->avatar) ? asset('storage/' . $profileInfo->first()->avatar) : asset('storage/default-avatar.png')  }}"
+                                        alt="Profile Picture" class="rounded-circle"
+                                        style=" width: 75px; height: 75px;">
+                                    <span class="ms-2 fs-5 fw-bold" >{{$user->username}}</span>
                                 </div>
 
                                 <div class=" d-md-flex justify-content-md-end">
@@ -51,12 +53,19 @@
                             {{-- ! gender select  --}}
                             <div class="  mb-3">
                                 <div class="form-floating">
+<<<<<<<<< Temporary merge branch 1
+                                    <select class="form-select" id="floatingSelect" name="gender">
+                                        <option value="male" >male</option>
+                                        <option value="female" @if($profileInfo->first()->gender == "female")
+                                            selected @endif>female</option>
+=========
                                     <select class="form-select" name="gender">
                                         <option value="">Select your gender</option>
                                         <option value="male" @if ($profileInfo->first()->gender == 'male') selected @endif>male
                                         </option>
                                         <option value="female" @if ($profileInfo->first()->gender == 'female') selected @endif>female
                                         </option>
+>>>>>>>>> Temporary merge branch 2
                                     </select>
                                     <label for="floatingSelect">Gender</label>
                                 </div>
@@ -75,11 +84,23 @@
                                     value="{{ $profileInfo->first()->website }}">
                                 <label for="floatingSelect">Enter your Website</label>
                             </div>
+
+<<<<<<<<< Temporary merge branch 1
                             <input type="email" name="email">
+=========
+
+
+>>>>>>>>> Temporary merge branch 2
                             <input type="submit" class="btn btn-primary" name="submit">
                         </form>
                     </div>
                 </div>
             </div>
+<<<<<<<<< Temporary merge branch 1
+
+    @endsection
+
+=========
         </div>
     @endsection
+>>>>>>>>> Temporary merge branch 2

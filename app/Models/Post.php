@@ -20,27 +20,28 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function media(){
+    public function media()
+    {
         return $this->hasMany(Post_Media::class);
     }
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'posts_tags');
     }
-  /*  public function tag(){
-        return $this->hasMany(Posts_tag::class);
-    }*/
-    public function like_posts() {
+
+    public function like_posts()
+    {
         return $this->hasMany(Like_Post::class);
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
-//!-------- not sure if i need this relationship
-    public function saved_posts(){
+    //!-------- not sure if i need this relationship
+    public function saved_posts()
+    {
         return $this->belongsToMany(Saved_Post::class);
     }
-
 }

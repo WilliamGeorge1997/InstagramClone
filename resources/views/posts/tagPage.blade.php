@@ -6,31 +6,43 @@
 <link rel="stylesheet" href="{{ asset('css/posts.css') }}">
 @endsection
 @section("content")
-
-{{-- <div class="story-header ">
-     @for($i = 0; $i < 6; $i++)
-            <div class="d-flex flex-column mx-2">
-                <img src="https://e0.pxfuel.com/wallpapers/41/351/desktop-wallpaper-kumpulan-luffy-smiling-luffy-smile.jpg " alt="Profile Picture" class="profile-picture">
-            <h6 class="username">username</h6>
-            </div>
-     @endfor
-    </div> --}}
-
+{{-- {{  dd($posts->first()->media->first()->media)}} --}}
 {{-- ======================================================================================== --}}
+    <div class="container m-5">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <!-- Profile Picture -->
+                        <div class="text-center">
+                            <img src="{{ asset('storage/'.$posts->first()->media->first()->media) }}"
+                                alt="Profile Picture" class="rounded-circle" style=" width: 150px; height: 150px;">
+                        </div>
+                    </div>
+                    <div class="col-md-9 text-start">
+                                <p class="fs-5 m-0 "> #{{ $tag->tag }} </p>
+                                <p class="fs-5 m-0">{{ count($posts) }}</p>
+                                <p class="fs-5 m-0">posts</p>
+                                <button type="submit" class="btn btn-primary col-12 my-3">
+                                    follow
+                                </button>
+                                </div>
+                            </div>
+
+                    <hr class="mt-3">
+            </div>
 @foreach ($posts as $post)
-<div class="post-container w-75">
-  <div class="post-header ">
+<div class="post-container">
+  <div class="post-header">
     <img class="profile-pic" src="https://e0.pxfuel.com/wallpapers/41/351/desktop-wallpaper-kumpulan-luffy-smiling-luffy-smile.jpg " alt="Profile Picture">
     <div class="username">{{ $post->user->username}}</div>
   </div>
   <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-   <a href="{{ route('posts.show', ['post' => $post->id]) }}"> <div class="carousel-inner">
-    @foreach ($post->media as $medium)
-  <div class="carousel-item active">
-    <img src="{{ asset('storage/'. $medium->media) }}" class="d-block post-image" alt="...">
-  </div>
-   @endforeach
-</div></a>
+    <div class="carousel-inner">
+        @foreach ($post->media as $medium)
+      <div class="carousel-item active">
+        <img src="{{ asset('storage/'. $medium->media) }}" class="d-block post-image" alt="...">
+      </div>
+       @endforeach
+    </div>
   </div> <div class="likes-comments">
     <div class="d-flex justify-content-between">
         <div class="d-flex">
@@ -49,8 +61,8 @@
   <div class="post-caption">
     <span class="username">{{ $post->user->username}}</span> {{ $post->caption}}
      @foreach ($post->tags as $tagBody)
-     <a href="{{ route('posts.tag', ['tag' => $tagBody->id]) }}">#{{ $tagBody->tag }}</a>
-     @endforeach
+   <a href="">#{{ $tagBody->tag }}</a>
+    @endforeach
   </div>
   <form action="" method="" class="comment-container d-flex">
     <textarea name="comment" placeholder="Add a comment..." class="comment p-1" id="comment" cols="1" rows="1"></textarea>
@@ -59,3 +71,4 @@
 </div>
 @endforeach
 
+@endsection

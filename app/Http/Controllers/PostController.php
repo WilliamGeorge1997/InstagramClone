@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Tag;
 use App\Models\Post;
+use App\Models\Comment;
 use App\Models\Posts_tag;
 use App\Models\Post_Media;
 use Illuminate\Http\Request;
@@ -18,13 +20,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        // $posts = Post::find(93);
-        // $media = Post_Media::where("post_id",$posts->id)->get();
-        //$posts = Post::with('media','tag')->get();
-      // $tag = Tag::find($posts->first()->tag->first()->tag_id);
-        // $post->setAttribute('tags', $tag);
         $posts = Post::with('user', 'media', 'tags')->get();
-
         $likeController = new LikePostController();
 
         $likesCounts = [];
@@ -33,12 +29,12 @@ class PostController extends Controller
             $likesCounts[$post->id] = $likeController->getLikesCount($post);
         }
 
-     //   foreach ($comments as $comment) {
-       //     $likesCounts[$comment->id] = $likeController->getLikesCount($comment);
-       // }
-       
+        //   foreach ($comments as $comment) {
+        //     $likesCounts[$comment->id] = $likeController->getLikesCount($comment);
+        // }
 
-        return view('posts.index', ['posts' => $posts,'likesCountData' => $likesCounts]);
+
+        return view('posts.index', ['posts' => $posts, 'likesCountData' => $likesCounts]);
     }
 
     /**
@@ -55,31 +51,28 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'caption' => 'nullable|string|max:255', // Making caption field nullable
-                'media' => 'required|array|max:10', // Make sure media is an array with maximum of 10 files
-                'media.*' => 'file|mimes:jpeg,jpg,png,gif,mp4|max:20480', // Validate each media file
-            'tag' => 'nullable|string|max:30|unique:tags', // Making tag field nullable and correcting the table name to 'tags'
+            'caption' => 'nullable|string|max:255',
+            'media' => 'required|array|max:10',
+            'media.*' => 'file|mimes:jpeg,jpg,png,gif,mp4|max:20480',
+            'tag' => 'nullable|string|max:30|unique:tags',
         ]);
         $post = Post::create([
             "user_id" => $request->userid,
             "caption" => $request->caption,
         ]);
-        $tag = Tag::where('tag',  $request->tagBody)->get();
-
-
-        if ($tag->isEmpty()) {
-            $tag = Tag::create([
-                'tag' => $request->tagBody
+        $tags = explode('#', $request->tag);
+        foreach ($tags as $tagItem) {
+            $tag = Tag::where('tag', $tagItem)->get();
+            if ($tag->isEmpty()) {
+                $tag = Tag::create([
+                    'tag' => $tagItem
+                ]);
+            }
+            Posts_tag::create([
+                'tag_id' => $tag->first()->id,
+                'post_id' => $post->id,
             ]);
-            $tagId =  $tag->id;
-        } else {
-            $tagId =  $tag->first()->id;
         }
-
-        Posts_tag::create([
-            'tag_id' => $tagId,
-            'post_id' => $post->id,
-        ]);
         if ($request->file('media')) {
             foreach ($request->file('media') as $image) {
                 $path = $image->store('post_media', 'public');
@@ -98,30 +91,62 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $posts = Post::with('user', 'media', 'tags')->find($id);
+        return view('posts.show', ['post' => $posts]);
     }
-
-    /**
+/**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+        $posts = Post::with('user', 'media', 'tags')->find($id);
+        return view('posts.edit', ['post' => $posts]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        Posts_tag::where('post_id', $post->id)->delete();
+        $request->validate([
+            'caption' => 'nullable|string|max:255',
+            'tag' => 'nullable|string|max:30|unique:tags',
+        ]);
+       Post::findOrFail($post->id)->update([
+            "caption" => $request->caption,
+        ]);
+        $tags = explode('#', $request->tag);
+        foreach ($tags as $tagItem) {
+        $tag = Tag::where('tag',$tagItem)->get();
+           if ($tag->isEmpty()) {
+            $tag = Tag::create([
+                'tag' => $tagItem
+            ]);}
+        Posts_tag::create([
+            'tag_id' => $tag->first()->id,
+            'post_id' => $post->id,
+        ]);
+        }
+        return redirect()->route('posts.index');
     }
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
         //
+    }
+    public function tag(Tag $tag)
+    {
+        $posts = Post::with('user', 'media', 'tags')
+            ->whereHas('tags', function ($query) use ($tag) {
+                $query->where('tags.id', $tag->id);
+            })
+            ->get();
+        return view('posts.tagPage', [
+            'tag' => $tag, 'posts' => $posts
+            //  'likesCountData' => $likesCountData
+        ]);
     }
 }

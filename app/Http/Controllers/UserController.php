@@ -22,6 +22,18 @@ class UserController extends Controller
 
     }
 
+    public function search()
+    {
+        $searchQuery = request('search');
+        if ($searchQuery) {
+            $users = User::where('username', 'like', '%' . $searchQuery . '%')->get();
+            return view('users.search', ['users' => $users, 'searchQuery' => $searchQuery]);
+        } else {
+            $users = User::all();
+            return view('users.search', ['users' => $users]);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -42,6 +54,7 @@ class UserController extends Controller
      */
 
 
+
     public function show(string $id)
     {
         $user = User::find($id);
@@ -50,6 +63,7 @@ class UserController extends Controller
         $followCountData = $followController->followCount($user->id);
         return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
     }
+>>>>>>>>> Temporary merge branch 2
 
     /**
      * Show the form for editing the specified resource.
@@ -57,7 +71,7 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::find($id);
-        
+
         if (auth()->id() == $user->id) {
             $profileInfo = Profile::where('user_id', $id)->get();
             return view('users.edit', ['user' => $user, 'profileInfo' => $profileInfo]);
@@ -69,15 +83,19 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $user = User::find($id);
-        
+
         if (auth()->id() == $user->id) {
+            
+            if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+                $path = $request->file('avatar')->store('avatars', 'public');
             Profile::where('user_id', $id)->update([
                 'gender' => $request->gender,
                 'website' => $request->website,
                 'bio' => $request->bio,
-                // 'avatar' => $request->avatar
+                'avatar' => $path
             ]);
-
+            }
+            
             User::where('id', $id)->update([
                 'email' => $request->email,
                 'username' => $request->username,
@@ -89,10 +107,12 @@ class UserController extends Controller
             ]);
 
             return redirect()->route('users.show', auth()->id());
-        } else {
+        } 
+        else 
+        {
             return redirect()->route('users.show', auth()->id());
         }
-    }
+        }
 
     /**
      * Remove the specified resource from storage.
@@ -102,3 +122,4 @@ class UserController extends Controller
         //
     }
 }
+
