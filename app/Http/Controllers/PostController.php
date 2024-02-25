@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Tag;
 use App\Models\Post;
+use App\Models\Comment;
 use App\Models\Posts_tag;
 use App\Models\Post_Media;
 use Illuminate\Http\Request;
@@ -20,7 +22,7 @@ class PostController extends Controller
     {
         // $posts = Post::find(93);
         // $media = Post_Media::where("post_id",$posts->id)->get();
-        $post = Post::with('media','tag')->get();
+        $post = Post::with('media', 'tag')->get();
         $tag = Tag::find($post->tag->first()->tag_id);
         // $post->setAttribute('tags', $tag);
         $likeController = app(Like::class);
@@ -44,8 +46,8 @@ class PostController extends Controller
     {
         $request->validate([
             'caption' => 'nullable|string|max:255', // Making caption field nullable
-                'media' => 'required|array|max:10', // Make sure media is an array with maximum of 10 files
-                'media.*' => 'file|mimes:jpeg,jpg,png,gif,mp4|max:20480', // Validate each media file
+            'media' => 'required|array|max:10', // Make sure media is an array with maximum of 10 files
+            'media.*' => 'file|mimes:jpeg,jpg,png,gif,mp4|max:20480', // Validate each media file
             'tag' => 'nullable|string|max:30|unique:tags', // Making tag field nullable and correcting the table name to 'tags'
         ]);
         $post = Post::create([
@@ -86,7 +88,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**

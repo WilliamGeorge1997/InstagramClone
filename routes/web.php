@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -34,13 +35,16 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::resource('posts',PostController::class);
+Route::resource('posts', PostController::class);
 
 // Route::get('/userprofile', [UserController::class, 'index'])->name('userprofile.index');
+
+
+Route::post('/posts/{post}/comment', [CommentController::class, 'store'])->name('posts.comment.store');
 
 Route::resource('users', UserController::class);
 
 Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
-Route::delete('/users/{user}/unfollow', [FollowStatusController::class , 'followUser'])->name('users.unfollow');
+Route::delete('/users/{user}/unfollow', [FollowStatusController::class, 'followUser'])->name('users.unfollow');
 
 require __DIR__ . '/auth.php';

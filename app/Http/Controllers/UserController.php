@@ -23,6 +23,7 @@ class UserController extends Controller
 
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -40,7 +41,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
     }
 
     /**
@@ -48,16 +48,16 @@ class UserController extends Controller
      */
 
 
-     public function show(string $id)
-     {
-         $user = User::find($id);
+    public function show(string $id)
+    {
+        $user = User::find($id);
         // if (auth()->id() == $user->id) {
-             $profileInfo = Profile::where('user_id', $id)->get();
-             $followController = app(FollowStatusController::class);
-             $followCountData = $followController->followCount($user->id);
-             return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo, 'followCountData'=>$followCountData]);
-      // } 
-     }
+        $profileInfo = Profile::where('user_id', $id)->get();
+        $followController = app(FollowStatusController::class);
+        $followCountData = $followController->followCount($user->id);
+        return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
+        // } 
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -66,7 +66,7 @@ class UserController extends Controller
     {
 
         $user = User::find($id);
-        
+
         if (auth()->id() == $user->id) {
             $profileInfo = Profile::where('user_id', $id)->get();
             return view('users.edit', ['user' => $user, 'profileInfo' => $profileInfo]);
@@ -81,21 +81,43 @@ class UserController extends Controller
 
         // dd($request);
 
-        $user = User::find($id);
-        
-        if (auth()->id() == $user->id) {
-            Profile::where('user_id', $id)->update([
-                'gender' => $request->gender,
-                'website' => $request->website,
-                'bio' => $request->bio,
-                'avatar' => $request->avatar
-            ]);
-            return redirect()->route('users.show', auth()->id());
-        } else {
-            return redirect()->route('users.show', auth()->id());
-        }
+        // $user = User::find($id);
 
-    }
+        // if (auth()->id() == $user->id) {
+        //     Profile::where('user_id', $id)->update([
+        //         'gender' => $request->gender,
+        //         'website' => $request->website,
+        //         'bio' => $request->bio,
+        //         'avatar' => $request->avatar
+        //     ]);
+        //     return redirect()->route('users.show', auth()->id());
+        // } else {
+        //     return redirect()->route('users.show', auth()->id());
+        // }
+
+        $user = User::find($id);
+        if (auth()->id() == $user->id) {
+
+
+                if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+                    $path = $request->file('avatar')->store('avatars', 'public');
+                    Profile::where('user_id', $id)->update([
+                        'gender' => $request->gender,
+                        'website' => $request->website,
+                        'bio' => $request->bio,
+                        'avatar' => $path
+                    ]);
+                } else {
+                    Profile::where('user_id', $id)->update([
+                        'gender' => $request->gender,
+                        'website' => $request->website,
+                        'bio' => $request->bio,
+                    ]);
+                }
+                return redirect()->route('users.show', auth()->id());
+            }
+        } 
+    
 
     /**
      * Remove the specified resource from storage.
@@ -104,5 +126,4 @@ class UserController extends Controller
     {
         //
     }
-}
-
+};
