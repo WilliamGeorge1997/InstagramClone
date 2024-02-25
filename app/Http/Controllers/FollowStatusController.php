@@ -12,7 +12,7 @@ class FollowStatusController extends Controller
     $userToFollow = User::findOrFail($userId);
     $authUser = auth()->user();
     $currentUser = User::find($authUser->id);
-
+    
     if ($currentUser->isFollowing($userToFollow)) 
     {
         $currentUser->unfollow($userToFollow);

@@ -4,7 +4,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-        <link href="https://db.onlinewebfonts.com/c/6d32b8e06f40fb7698cfb714b9e7975d?family=Billabong+W00+Regular" rel="stylesheet">
+    <link href="https://db.onlinewebfonts.com/c/6d32b8e06f40fb7698cfb714b9e7975d?family=Billabong+W00+Regular"
+        rel="stylesheet">
 </head>
 
 </html>
@@ -22,7 +23,7 @@
         <div>
             {{-- <x-input-label for="email" :value="__('Email')" /> --}}
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
-                required autofocus autocomplete="username" placeholder="Phone number, username, or email" />
+                required autofocus autocomplete="username" placeholder="Email" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -58,6 +59,13 @@
                     {{ __('Forgot your password?') }}
                 </a>
             @endif
+        </div>
+
+        <div class="mt-3 text-center">
+            <a class=" nav-link text-gray-600"
+                href="{{ route('register') }}">
+                {{ __('Register') }}
+            </a>
         </div>
     </form>
 </x-guest-layout>

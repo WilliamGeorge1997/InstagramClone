@@ -14,7 +14,7 @@
     <div class="container-fluid ">
         {{------------------------- Sidebar -------------------------}}
         <div class="row">
-            <div class="col-md-3 col-2 p-0 border col-lg-2" >
+            <div class="col-md-3 col-2 p-0 border col-lg-2"  style="height: 100vh">
                 <div class="sidebar  position-fixed top-0 start-0 bottom-0">
                     @include('includes.sidebar')
                 </div>
@@ -27,6 +27,8 @@
                 </div>
                 </div>
             </div>
+
+          
 
 
         </div>
