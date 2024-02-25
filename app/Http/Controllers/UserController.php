@@ -23,6 +23,18 @@ class UserController extends Controller
 
     }
 
+    public function search()
+    {
+        $searchQuery = request('search');
+        if ($searchQuery) {
+            $users = User::where('username', 'like', '%' . $searchQuery . '%')->get();
+            return view('users.search', ['users' => $users, 'searchQuery' => $searchQuery]);
+        } else {
+            $users = User::all();
+            return view('users.search', ['users' => $users]);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */

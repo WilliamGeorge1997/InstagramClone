@@ -43,4 +43,6 @@ Route::resource('users', UserController::class);
 Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
 Route::delete('/users/{user}/unfollow', [FollowStatusController::class , 'followUser'])->name('users.unfollow');
 
+Route::get('/search', [UserController::class, 'search'])->name('users.search');
+
 require __DIR__ . '/auth.php';
