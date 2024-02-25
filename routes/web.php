@@ -56,4 +56,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/unblock/{user}', [BlockController::class, 'unblock'])->name('unblock');
 });
 
+Route::get('/search', [UserController::class, 'search'])->name('users.search');
+
 require __DIR__ . '/auth.php';
