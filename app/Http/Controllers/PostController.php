@@ -85,23 +85,42 @@ class PostController extends Controller
     {
         //
     }
-
-    /**
+/**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+        $posts = Post::with('user', 'media', 'tags')->find($id);
+        return view('posts.edit', ['post' => $posts]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        Posts_tag::where('post_id', $post->id)->delete();
+        $request->validate([
+            'caption' => 'nullable|string|max:255',
+            'tag' => 'nullable|string|max:30|unique:tags',
+        ]);
+       Post::findOrFail($post->id)->update([
+            "caption" => $request->caption,
+        ]);
+        $tags = explode('#', $request->tag);
+        foreach ($tags as $tagItem) {
+        $tag = Tag::where('tag',$tagItem)->get();
+           if ($tag->isEmpty()) {
+            $tag = Tag::create([
+                'tag' => $tagItem
+            ]);}
+        Posts_tag::create([
+            'tag_id' => $tag->first()->id,
+            'post_id' => $post->id,
+        ]);
+        }
+        return redirect()->route('posts.index');
     }
-
     /**
      * Remove the specified resource from storage.
      */
