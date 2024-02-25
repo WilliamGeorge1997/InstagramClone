@@ -1,6 +1,4 @@
-
-
-    @extends('layouts.profile')
+ @extends('layouts.profile')
     @section('content')
     <div class=" mt-5 mx-auto">
                 <div class="row align-items-center">
@@ -63,13 +61,17 @@
                             </div>
                         </section>
                         <!-- Bio -->
-                        <p class="m-0">{{ $profileInfo->first() ? $profileInfo->first()->bio : '' }}</p>
-                        <p class="m-0">{{ $profileInfo->first()->website ? $profileInfo->first()->website: '' }}</p>
+                    <p class="m-0 text-start"> {{ $profileInfo->first()->bio ? $profileInfo->first()->bio : '' }} </p>
+                    <p class="m-0 text-start">{{ $profileInfo->first()->website ? $profileInfo->first()->website : '' }}</p>
+                    <p class="m-0 text-start">{{ $profileInfo->first()->gender ? $profileInfo->first()->gender : '' }}</p>
                     </div>
                     <hr class="mt-3">
+
                 </div>
+                <hr class="mt-3">
             </div>
 
-
-     @endsection
+        </div>
+        </div>
+    @endsection
 

@@ -51,8 +51,6 @@ class RegisteredUserController extends Controller
         $profileInfo = Profile::create(
             [
                 'user_id' => $user->id,
-                'gender' => "male",
-                // 'avatar'=> $request->avatar,
             ]
         );
         event(new Registered($user, $profileInfo));
