@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlockController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\FollowStatusController;
+use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +24,7 @@ use App\Http\Controllers\FollowStatusController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -42,20 +44,24 @@ Route::resource('posts', PostController::class);
 
 
 
+
 Route::post('/posts/{post}/comment', [CommentController::class, 'store'])->name('posts.comment.store');
 
 Route::resource('users', UserController::class);
 Route::post('users/{id}/block', [UserController::class, 'blockUser'])->name('users.block');
 Route::post('users/{id}/unblock', [UserController::class, 'unblockUser'])->name('users.unblock');
 
-Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
-Route::delete('/users/{user}/unfollow', [FollowStatusController::class, 'followUser'])->name('users.unfollow');
+
 
 Route::get('/users/{id}/followings', [FollowStatusController::class , 'followingUsers'])->name('users.followings');
 Route::get('/users/{id}/followers', [FollowStatusController::class , 'followerUsers'])->name('users.followers');
 
+    Route::post('/posts/{post}/like', [LikeController::class, 'likePost'])->name('posts.like');
+    Route::delete('/posts/{post}/unlike', [LikeController::class,'unlikePost'])->name('posts.unlike');
 
 Route::middleware(['auth'])->group(function () {
+    Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
+    Route::delete('/users/{user}/unfollow', [FollowStatusController::class, 'followUser'])->name('users.unfollow');
     Route::post('/block/{user}', [BlockController::class, 'block'])->name('block');
     Route::post('/unblock/{user}', [BlockController::class, 'unblock'])->name('unblock');
 });

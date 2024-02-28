@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Tag;
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Comment;
 use App\Models\Posts_tag;
 use App\Models\Post_Media;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
+use Illuminate\Http\Request;
 use Overtrue\LaravelLike\Like;
+use Illuminate\Support\Facades\Auth;
 use function PHPUnit\Framework\isEmpty;
 
 class PostController extends Controller
@@ -18,24 +20,25 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $posts = Post::with('user', 'media', 'tags')->get();
-        $likeController = new LikePostController();
+        public function index()
+        {
+            $authUser = auth()->user();
+            $user = User::find($authUser->id);
+            $followingUserIds = $user->followings()->pluck('followable_id');
 
-        $likesCounts = [];
+            $posts = Post::with(['user.profiles', 'media', 'tags', 'likes'])->whereIn('user_id', $followingUserIds)->get();
 
-        foreach ($posts as $post) {
-            $likesCounts[$post->id] = $likeController->getLikesCount($post);
+
+            /* $likeController = new LikePostController();
+            $likesCounts = [];
+            foreach ($posts as $post) {
+                $likesCounts[$post->id] = $likeController->getLikesCount($post);
+            }
+            foreach ($comments as $comment) {
+                $likesCounts[$comment->id] = $likeController->getLikesCount($comment);
+            }*/
+            return view('posts.index', ['posts' => $posts]);
         }
-
-        //   foreach ($comments as $comment) {
-        //     $likesCounts[$comment->id] = $likeController->getLikesCount($comment);
-        // }
-
-
-        return view('posts.index', ['posts' => $posts, 'likesCountData' => $likesCounts]);
-    }
 
     /**
      * Show the form for creating a new resource.
