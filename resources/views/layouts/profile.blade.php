@@ -7,6 +7,7 @@
     <title>@yield('title') </title>
     <link rel="stylesheet" href="{{ asset("css/all.min.css") }}">
     <link rel="stylesheet" href="{{ asset("css/bootstrap.min.css") }}">
+    @yield('style')
 
 
 </head>
@@ -14,15 +15,15 @@
     <div class="container-fluid ">
         {{------------------------- Sidebar -------------------------}}
         <div class="row">
-            <div class="col-md-3 col-2 p-0 border col-lg-2" style="height:100vh" >
+            <div class="col-md-3 col-2 p-0 border" style="height:100vh" >
                 <div class="sidebar  position-fixed top-0 start-0 bottom-0" style="width:inherit;">
                     @include('includes.sidebar')
                 </div>
             </div>
         {{------------------------- Main layout -------------------------}}
-            <div class="col-md-10 col-4"  >
+            <div class="col-md-9 col-10"  >
                 <div class="container">
-                    <div class="row text-center" style="margin:0px 150px">
+                    <div class="row text-center" >
                     @yield('content')
                 </div>
                 </div>

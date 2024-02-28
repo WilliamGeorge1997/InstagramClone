@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlockController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FollowStatusController;
 
@@ -34,13 +35,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::get('posts/{tag}/tagPage', 'PostController@tagPage')->name('posts.tag');
 
 Route::get('posts/{tag}/tagPage', [PostController::class, 'tag'])->name('posts.tag');
+Route::get('posts/{id}/user', [PostController::class, 'postsByUserId'])->name('posts.profile');
+
+Route::post('posts/share', [PostController::class, 'share'])->name('posts.share');
 
 Route::resource('posts', PostController::class);
-
-
 
 Route::post('/posts/{post}/comment', [CommentController::class, 'store'])->name('posts.comment.store');
 

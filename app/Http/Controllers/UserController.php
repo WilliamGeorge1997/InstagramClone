@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Profile;
+use App\Models\Post;
 use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -61,7 +62,10 @@ class UserController extends Controller
         $profileInfo = Profile::where('user_id', $id)->get();
         $followController = app(FollowStatusController::class);
         $followCountData = $followController->followCount($user->id);
-        return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
+        $posts = Post::with('user', 'media', 'tags')
+        ->where('user_id', $id)
+        ->get();
+        return view('users.userprofile', ['user' => $user, 'posts' => $posts, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
     }
 
 
@@ -85,7 +89,7 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (auth()->id() == $user->id) {
-            
+
             if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
                 $path = $request->file('avatar')->store('avatars', 'public');
             Profile::where('user_id', $id)->update([
@@ -95,7 +99,7 @@ class UserController extends Controller
                 'avatar' => $path
             ]);
             }
-            
+
             User::where('id', $id)->update([
                 'email' => $request->email,
                 'username' => $request->username,
@@ -107,8 +111,8 @@ class UserController extends Controller
             ]);
 
             return redirect()->route('users.show', auth()->id());
-        } 
-        else 
+        }
+        else
         {
             return redirect()->route('users.show', auth()->id());
         }
