@@ -110,25 +110,20 @@ class PostController extends Controller
     {
         Posts_tag::where('post_id', $post->id)->delete();
         $request->validate([
-            'caption' => 'nullable|string|max:255',
-            'tag' => 'nullable|string|max:30|unique:tags',
+            'tag_caption' => 'nullable|string',
         ]);
-       Post::findOrFail($post->id)->update([
-            "caption" => $request->caption,
-        ]);
-        $tags = explode('#', $request->tag);
-        foreach ($tags as $tagItem) {
-        $tag = Tag::where('tag',$tagItem)->get();
-           if ($tag->isEmpty()) {
-            $tag = Tag::create([
-                'tag' => $tagItem
-            ]);}
-        Posts_tag::create([
-            'tag_id' => $tag->first()->id,
-            'post_id' => $post->id,
-        ]);
+        $tagCaption = explode(' ', $request->tag_caption);
+
+        foreach ($tagCaption as $item) {
+            if (Str::startsWith($item, '#')) {
+                $tagModel = Tag::firstOrCreate(['tag' => $item]);
+                $post->tags()->syncWithoutDetaching([$tagModel->id]);
+            }
         }
-        return redirect()->route('posts.index');
+        $post->update([
+            "caption" => $tagCaption==[""] ? null :  $request->tag_caption,
+        ]);
+        return view('posts.show', ['post' => $post]);
     }
     /**
      * Remove the specified resource from storage.
@@ -147,6 +142,20 @@ class PostController extends Controller
         return view('posts.tagPage', [
             'tag' => $tag, 'posts' => $posts
             //  'likesCountData' => $likesCountData
+        ]);
+    }
+    public function postsByUserId(string $id)
+    {
+        $posts = Post::with('user', 'media', 'tags')
+        ->where('user_id', $id)
+        ->orderBy('created_at', 'desc')
+        ->get();
+        $posts = Post::with('user', 'media', 'tags')
+    ->where('user_id', $id)
+    ->orderBy('timestamp', 'desc') // Assuming 'timestamp' is the name of the attribute
+    ->get();
+        return view('posts.profile', [
+            'posts' => $posts
         ]);
     }
 }
