@@ -1,11 +1,12 @@
  @extends('layouts.profile')
+ @section('title','User Profile')
     @section('content')
     <div class=" mt-5 mx-auto">
                 <div class="row align-items-center">
                     <div class="col-md-3">
                         <!-- Profile Picture -->
                         <div class="text-center">
-                            <img src="{{ isset($profileInfo->first()->avatar) ? asset('storage/' . $profileInfo->first()->avatar) : asset('storage/default-avatar.png')  }}"
+                            <img src="{{ $profileInfo->first()->avatar ? Storage::url($profileInfo->first()->avatar) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' }}"
                                 alt="Profile Picture" class="rounded-circle" style=" width: 150px; height: 150px;">
                         </div>
                     </div>
@@ -52,11 +53,11 @@
                                 <!-- Followers, Following, Posts -->
                                 <div class="col">
                                     <!-- Followers -->
-                                    <p><strong><a class="text-decoration-none text-muted" href="{{ route('users.followers', $user->id) }}">Followers: {{ $followCountData['followersCount']}}</a></strong></p>
+                                    <p><strong><a class="text-decoration-none text-dark" href="{{ route('users.followers', $user->id) }}">Followers: {{ $followCountData['followersCount']}}</a></strong></p>
                                 </div>
                                 <div class="col">
                                     <!-- Following -->
-                                 <p><strong><a class="text-decoration-none text-muted" href="{{ route('users.followings', $user->id) }}">Following: {{ $followCountData['followingCount']}}</a></strong></p>
+                                 <p><strong><a class="text-decoration-none text-dark" href="{{ route('users.followings', $user->id) }}">Following: {{ $followCountData['followingCount']}}</a></strong></p>
                                 </div>
                             </div>
                         </section>

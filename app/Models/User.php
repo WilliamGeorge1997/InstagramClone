@@ -70,9 +70,9 @@ class User extends Authenticatable
         return $this->hasMany(Like_Comment::class);
     }
 
-    public function like_posts()
+    public function likes()
     {
-        return $this->hasMany(Like_Post::class);
+        return $this->hasMany(Like::class);
     }
 
     public function follow_status()
