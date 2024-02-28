@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Overtrue\LaravelLike\Like;
 use Illuminate\Support\Facades\DB;
 
-class LikePostController extends Controller
+class LikeController extends Controller
 {
     public function likePost(string $postId)
 {
@@ -18,10 +18,11 @@ class LikePostController extends Controller
     $user = User::find($authUser->id);
     $post = Post::find($postId);
 
+
     if(!$user->likes()->where('likeable_id', $postId)->exists()) {
         $user->likes()->create([
         'likeable_id' => $postId,
-        'likeable_type' => get_class($post)
+        'likeable_type' => get_class($post),
     ]);
     }
 

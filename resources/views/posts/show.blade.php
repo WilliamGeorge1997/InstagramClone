@@ -1,5 +1,5 @@
-@extends('layouts.main')
-@section('title', 'posts')
+@extends('layouts.profile')
+@section('title', 'Show Post')
 @section('style')
     <link rel="stylesheet" href="{{ asset('css/posts.css') }}">
 @endsection
