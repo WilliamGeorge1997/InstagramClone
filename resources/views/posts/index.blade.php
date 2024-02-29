@@ -25,7 +25,7 @@
         @foreach ($posts as $post)
         <div class="post-container w-75">
         <div class="post-header ">
-            <img loading="lazy"  class="profile-pic" src="{{ Storage::url($post->user->profiles->avatar) }}" alt="Profile Picture">
+            <img loading="lazy"  class="profile-pic" src="{{$post->user->profiles->avatar?  Storage::url($post->user->profiles->avatar) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' }}" alt="Profile Picture">
             <div class="username">{{ $post->user->username}}</div>
         </div>
         <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
