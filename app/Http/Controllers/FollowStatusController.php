@@ -14,7 +14,6 @@ class FollowStatusController extends Controller
     $authUser = auth()->user();
     $currentUser = User::find($authUser->id);
 
-
     if ($currentUser->isFollowing($userToFollow))
 
     {
@@ -46,6 +45,7 @@ public function followCount(string $id)
 
     return compact('followersCount', 'followingCount');
  }
+
 
 
  public function followingUsers(string $id)

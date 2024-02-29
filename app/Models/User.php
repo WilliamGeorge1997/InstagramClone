@@ -79,9 +79,19 @@ class User extends Authenticatable
         return $this->hasMany(Follow_Status::class);
     }
 
+    // public function blocks()
+    // {
+    //     return $this->hasMany(Block::class);
+    // }
+
     public function blocks()
     {
-        return $this->hasMany(Block::class);
+        return $this->belongsToMany(User::class, 'blocks', 'blocked_id', 'blocker_id')->withTimestamps();
+    }
+
+    public function isBlockedBy(User $user)
+    {
+        return $this->blocks()->where('blocker_id', $user->id)->exists();
     }
 
 

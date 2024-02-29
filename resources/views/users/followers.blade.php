@@ -1,13 +1,13 @@
 @extends('layouts.profile')
-@section('title','Followers Users')
+@section('title', 'Followers Users')
 
 
 @section('content')
-@if($followersCount > 0)
-    <div class="d-flex justify-content-lg-between my-4 border">
-        <h4 >Followers Users</h4>
-    <h4>Followers Count: {{ $followersCount }}</h4>
-    </div>
+    @if ($followersCount > 0)
+        <div class="d-flex justify-content-lg-between my-4 border">
+            <h4>Followers Users</h4>
+            <h4>Followers Count: {{ $followersCount }}</h4>
+        </div>
 
     <table class="table border ">
         <thead>
@@ -58,21 +58,23 @@
 
                                 @endif
 
-                        </form>
+                                    </form>
+                                @endif
                             @endif
+                        <td>
+                            @if (auth()->check() && auth()->user()->id !== $followerData->id)
+                                <form method="POST" action="{{ route('users.block', $followerData->id) }}" class="mx-3">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger px-4">Block</button>
+                                </form>
                             @endif
-                <td></td>
-            </tr>
-
-            @endforeach
-        </tbody>
-    </table>
-
-
-
-
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     @else
-        <h3 class="text-danger mt-5 pt-5" >No users being follow you.</h3>
+        <h3 class="text-danger mt-5 pt-5">No users being follow you.</h3>
     @endif
 
 
