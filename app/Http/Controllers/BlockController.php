@@ -1,64 +1,35 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Block;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class BlockController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function blockUser(Request $request, $userId)
     {
-        //
-    }
+        $userToFollow = User::findOrFail($userId);
+        $authUser = auth()->user();
+        $currentUser = User::find($authUser->id);
+        $blocks = Block::with('blocked')->where('blocker_id', $currentUser->id)->get();
+        $currentUser->unfollow($userToFollow);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        Block::create([
+            'blocker_id' => $currentUser->id,
+            'blocked_id' => $userToFollow->id,
+        ]);
+        return redirect()->back()->with(['blockedUsers' => $blocks]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function showBlockedUsers(string $id)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $currentUser = User::find($id);
+        if (auth()->user() == $currentUser) {
+            $authUser = auth()->user();
+            $blockedUsers = Block::with('blocked')->where('blocker_id', $authUser->id)->get();
+            return view('users.blocked', ['blockedUsers' => $blockedUsers, 'currentUser' => $currentUser]);
+        } else {
+            return view('auth.login');
+        }
     }
 }

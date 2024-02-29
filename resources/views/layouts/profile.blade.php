@@ -7,7 +7,7 @@
     <title>@yield('title') </title>
     <link rel="stylesheet" href="{{ asset("css/all.min.css") }}">
     <link rel="stylesheet" href="{{ asset("css/bootstrap.min.css") }}">
-
+    @yield('style')
 
 </head>
 <body>

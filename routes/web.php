@@ -22,7 +22,7 @@ use App\Http\Controllers\FollowStatusController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.register');
 });
 
 Route::get('/dashboard', function () {
@@ -45,19 +45,19 @@ Route::resource('posts', PostController::class);
 Route::post('/posts/{post}/comment', [CommentController::class, 'store'])->name('posts.comment.store');
 
 Route::resource('users', UserController::class);
-Route::post('users/{id}/block', [UserController::class, 'blockUser'])->name('users.block');
-Route::post('users/{id}/unblock', [UserController::class, 'unblockUser'])->name('users.unblock');
+
 
 Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
 Route::delete('/users/{user}/unfollow', [FollowStatusController::class, 'followUser'])->name('users.unfollow');
 
-Route::get('/users/{id}/followings', [FollowStatusController::class , 'followingUsers'])->name('users.followings');
-Route::get('/users/{id}/followers', [FollowStatusController::class , 'followerUsers'])->name('users.followers');
+Route::get('/users/{id}/followings', [FollowStatusController::class, 'followingUsers'])->name('users.followings');
+Route::get('/users/{id}/followers', [FollowStatusController::class, 'followerUsers'])->name('users.followers');
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/block/{user}', [BlockController::class, 'block'])->name('block');
-    Route::post('/unblock/{user}', [BlockController::class, 'unblock'])->name('unblock');
+    Route::post('users/{id}/block', [BlockController::class, 'blockUser'])->name('users.block');
+    Route::get('users/{id}/blocked', [BlockController::class, 'showBlockedUsers'])->name('users.blocked');
+    Route::DELETE('users/{id}/unblock', [BlockController::class, 'unblockUser'])->name('users.unblock');
 });
 
 Route::get('/search', [UserController::class, 'search'])->name('users.search');
