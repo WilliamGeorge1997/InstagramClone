@@ -30,10 +30,11 @@ class Post extends Model
         return $this->belongsToMany(Tag::class, 'posts_tags');
     }
 
-    public function like_posts()
+    public function likes()
     {
-        return $this->hasMany(Like_Post::class);
+        return $this->morphMany(Like::class, 'likeable');
     }
+
 
     public function comments()
     {

@@ -1,26 +1,26 @@
  @extends('layouts.profile')
- @section('title', 'posts')
+ @section('title','User Profile')
  @section('style')
-     <link rel="stylesheet" href="{{ asset('css/posts.css') }}">
-     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
- @endsection
- @section('content')
-     <div class=" mt-5 mx-auto">
-         <div class="row align-items-center">
-             <div class="col-md-3">
-                 <!-- Profile Picture -->
-                 <div class="text-center">
-                     <img src="{{ isset($profileInfo->first()->avatar) ? asset('storage/' . $profileInfo->first()->avatar) : asset('storage/default-avatar.png') }}"
-                         alt="Profile Picture" class="rounded-circle" style=" width: 150px; height: 150px;">
-                 </div>
-             </div>
-             <div class="col-md-9">
-                 <!-- Username -->
-                 <section class="d-flex flex-column mb-3">
-                     <div class="row align-items-center">
-                         <span class="fs-4 col-4">{{ $user->username }}</span>
-                         <!-- Edit Profile Button -->
-                         {{-- Follow/Unfollow button --}}
+ <link rel="stylesheet" href="{{ asset('css/posts.css') }}">
+ <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+@endsection
+    @section('content')
+    <div class=" mt-5 mx-auto">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <!-- Profile Picture -->
+                        <div class="text-center">
+                            <img src="{{ $profileInfo->first()->avatar ? Storage::url($profileInfo->first()->avatar) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' }}"
+                                alt="Profile Picture" class="rounded-circle" style=" width: 150px; height: 150px;">
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <!-- Username -->
+                        <section class="d-flex flex-column mb-3">
+                            <div class="row align-items-center">
+                                <span class="fs-4 col-4">{{ $user->username }}</span>
+                                <!-- Edit Profile Button -->
+                                {{-- Follow/Unfollow button --}}
 
                          @if (auth()->check() && auth()->user()->id !== $user->id)
                              @if (auth()->user()->isFollowing($user))

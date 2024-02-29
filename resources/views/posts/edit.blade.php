@@ -6,19 +6,69 @@
 @section('content')
 
     {{-- ======================================================================================== --}}
-    <div class="post-container  w-100">
+    <div class="w-100 p-4 d-flex align-items-center justify-content-center vh-100">
 
         <div class="row row-cols-md-2">
-            <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    @foreach ($post->media as $medium)
-                        <div class="carousel-item active">
-                            <img src="{{ asset('storage/' . $medium->media) }}" class="d-block mt-2 post-image"
-                                alt="...">
-                        </div>
-                    @endforeach
+            <div>
+                @if ($post->media->count() > 1)
+                <div id="carouselExampleIndicators" class="carousel slide">
+                    <div class="carousel-indicators">
+                        @foreach ($post->media as $key => $medium)
+                            <button type="button" data-bs-target="#carouselExampleIndicators"
+                                data-bs-slide-to="{{ $key }}" {{ $key == 0 ? 'class=active' : '' }}
+                                aria-label="Slide {{ $key + 1 }}"></button>
+                        @endforeach
+                    </div>
+                    <div class="carousel-inner">
+                        @foreach ($post->media as $key => $medium)
+                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                @php
+                                    $extension = pathinfo($medium->media, PATHINFO_EXTENSION);
+                                @endphp
+                                @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
+                                    <img src="{{ Storage::url($medium->media) }}" class="d-block post-image w-100"
+                                        style="object-fit: cover; max-height: 500px;min-height:300px" alt="...">
+                                @elseif (in_array($extension, ['mp4', 'mov', 'avi', 'wmv']))
+                                    <video class="d-block post-video w-100"
+                                        style="object-fit: cover; max-height: 500px;min-height:300px" autoplay muted loop>
+                                        <source src="{{ Storage::url($medium->media) }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
+                @else
+                <div>
+                    @php
+                        $extension = pathinfo($post->media->first()->media, PATHINFO_EXTENSION);
+
+                    @endphp
+                    @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
+                        <img src="{{ Storage::url($post->media->first()->media) }}" class="d-block post-image w-100"
+                            style="object-fit: cover; max-height: 500px;min-height:300px" alt="...">
+                    @elseif (in_array($extension, ['mp4', 'mov', 'avi', 'wmv']))
+                        <video class="d-block post-video w-100"
+                            style="object-fit: cover; max-height: 500px;min-height:300px" autoplay muted loop>
+                            <source src="{{ Storage::url($post->media->first()->media) }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    @endif
+                </div>
+                @endif
             </div>
+
             <div>
                 <div class="post-header justify-content-between">
                     <div> <img class="profile-pic"
@@ -29,31 +79,23 @@
                         </span>
                     </div>
                 </div>
-               <form action="{{ route('posts.update', ['post' => $post->id])}}" method="POST" >
-                @csrf
-                @method('PUT')
-                <div class="mb-3">
-                    <input type="text" name="tag" class="form-control" id="exampleFormControlInput1"
-                   value='@foreach($post->tags as $tagBody) #{{$tagBody->tag }}@endforeach'
-                     placeholder="tag">
-                  </div>
-                  <div class="mb-3">
-                    <textarea  name="caption" class="form-control"
-                    value="{{ $post->caption }}"
+                <form action="{{ route('posts.update', ['post' => $post->id]) }}" method="POST" class="mt-2">
+                    @csrf
+                    @method('PUT')
 
-                       id="exampleFormControlTextarea1"  placeholder="caption" rows="3">{{ $post->caption }}</textarea>
-                  </div>
+                    <textarea name="tag_caption" class="form-control" value="{{ $post->caption }}" id="exampleFormControlTextarea1"
+                        placeholder="caption" rows="3">{{ $post->caption }}</textarea>
                     <button type="submit" class="btn text-primary">Edit</button>
-                 </from>
-                 @if ($errors->any() )
-                 @foreach($errors->all() as $error)
-                 <p>{{$error}}</p>
-                 @endforeach
-                     @endif
-                </div>
-
+                    </from>
+                    @if ($errors->any())
+                        @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    @endif
             </div>
+
         </div>
+    </div>
 
 
 @endsection

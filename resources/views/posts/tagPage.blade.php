@@ -10,7 +10,7 @@
     <div class="row align-items-center">
         <div class="col-md-3 col-12">
             <div class="text-center">
-                <img src="{{ asset('storage/' . $posts->first()->media->first()->media) }}" alt="Profile Picture"
+                <img src="{{ Storage::url( $posts->first()->media->first()->media) }}" alt="Tag Picture"
                     class="rounded-circle" style=" width: 150px; height: 150px;">
             </div>
         </div>
@@ -38,7 +38,7 @@
         @foreach ($posts as $post)
         <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="m-0 p-1">
             <div class="col">
-                <div class="card bg-danger border-0 position-relative post-disc">
+                <div class="card border-0 position-relative post-disc">
                     @php
                         $extension = pathinfo($post->media->first()->media, PATHINFO_EXTENSION);
                     @endphp

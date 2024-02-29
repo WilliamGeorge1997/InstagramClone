@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Overtrue\LaravelLike\Like;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use function PHPUnit\Framework\isEmpty;
 
 class PostController extends Controller
@@ -21,10 +22,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('user', 'media', 'tags')->orderBy('created_at', 'desc')->get();
-        return view('posts.index', [
-            'posts' => $posts
-        ]);
+        $authUser = auth()->user();
+        $user = User::find($authUser->id);
+        $followingUserIds = $user->followings()->pluck('followable_id');
+        $posts = Post::with(['user.profiles', 'media', 'tags', 'likes'])->whereIn('user_id', $followingUserIds)->orderBy('created_at', 'desc')->get();
+
+
+        return view('posts.index', ['posts' => $posts]);
     }
 
     /**
@@ -110,26 +114,20 @@ class PostController extends Controller
     {
         Posts_tag::where('post_id', $post->id)->delete();
         $request->validate([
-            'caption' => 'nullable|string|max:255',
-            'tag' => 'nullable|string|max:30|unique:tags',
+            'tag_caption' => 'nullable|string',
         ]);
-        Post::findOrFail($post->id)->update([
-            "caption" => $request->caption,
-        ]);
-        $tags = explode('#', $request->tag);
-        foreach ($tags as $tagItem) {
-            $tag = Tag::where('tag', $tagItem)->get();
-            if ($tag->isEmpty()) {
-                $tag = Tag::create([
-                    'tag' => $tagItem
-                ]);
+        $tagCaption = explode(' ', $request->tag_caption);
+
+        foreach ($tagCaption as $item) {
+            if (Str::startsWith($item, '#')) {
+                $tagModel = Tag::firstOrCreate(['tag' => $item]);
+                $post->tags()->syncWithoutDetaching([$tagModel->id]);
             }
-            Posts_tag::create([
-                'tag_id' => $tag->first()->id,
-                'post_id' => $post->id,
-            ]);
         }
-        return redirect()->route('posts.index');
+        $post->update([
+            "caption" => $tagCaption == [""] ? null :  $request->tag_caption,
+        ]);
+        return view('posts.show', ['post' => $post]);
     }
 
     /**
@@ -150,6 +148,21 @@ class PostController extends Controller
         $tag = Tag::find($id)->tag;
         return view('posts.tagPage', [
             'tag' => $tag, 'posts' => $posts
+        ]);
+    }
+
+    public function postsByUserId(string $id)
+    {
+        $posts = Post::with('user', 'media', 'tags')
+            ->where('user_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $posts = Post::with('user', 'media', 'tags')
+            ->where('user_id', $id)
+            ->orderBy('timestamp', 'desc') // Assuming 'timestamp' is the name of the attribute
+            ->get();
+        return view('posts.profile', [
+            'posts' => $posts
         ]);
     }
 }
