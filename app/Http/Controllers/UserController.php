@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Profile;
+use App\Models\Post;
 use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -67,7 +68,10 @@ class UserController extends Controller
         $profileInfo = Profile::where('user_id', $id)->get();
         $followController = app(FollowStatusController::class);
         $followCountData = $followController->followCount($user->id);
-        return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
+        $posts = Post::with('user', 'media', 'tags')
+        ->where('user_id', $id)
+        ->get();
+        return view('users.userprofile', ['user' => $user, 'posts' => $posts, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
     }
 
 
@@ -104,7 +108,7 @@ class UserController extends Controller
                 'bio' => $request->bio,
 
             ]);
-
+            
 
             User::where('id', $id)->update([
                 'email' => $request->email,

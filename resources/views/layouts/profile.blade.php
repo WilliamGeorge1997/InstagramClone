@@ -56,9 +56,9 @@
                 </div>
             </div>
         {{------------------------- Main layout -------------------------}}
-            <div class="col-md-10 col-4"  >
+            <div class="col-md-9 col-10"  >
                 <div class="container">
-                    <div class="row text-center" style="margin:0px 150px">
+                    <div class="row text-center" >
                     @yield('content')
                 </div>
                 </div>

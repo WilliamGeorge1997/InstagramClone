@@ -4,13 +4,13 @@ namespace App\Models;
 
 //use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Post;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Overtrue\LaravelLike\Traits\Liker;
+use Illuminate\Notifications\Notifiable;
 use Overtrue\LaravelFollow\Traits\Follower;
 use Overtrue\LaravelFollow\Traits\Followable;
-use Overtrue\LaravelLike\Traits\Liker;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
 class User extends Authenticatable
@@ -59,7 +59,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profile::class);
     }
-
     public function comments()
     {
         return $this->hasMany(Comment::class);
