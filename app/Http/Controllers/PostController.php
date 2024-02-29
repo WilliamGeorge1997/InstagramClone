@@ -21,7 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('user', 'media', 'tags','kkk')->orderBy('created_at', 'desc')->get();
+        $posts = Post::with('user', 'media', 'tags')->orderBy('created_at', 'desc')->get();
         return view('posts.index', [
             'posts' => $posts
         ]);
@@ -35,7 +35,8 @@ class PostController extends Controller
         return view('posts.create');
     }
     public function share(Request $request)
-    {    $paths = $request->session()->get('paths', []);
+    {
+        $paths = $request->session()->get('paths', []);
 
         $request->validate([
             'media' => 'required|array|max:10',
@@ -65,7 +66,7 @@ class PostController extends Controller
 
         $post = Post::create([
             "user_id" =>  auth()->user()->id,
-            "caption" => $tagCaption==[""] ? null :  $request->tag_caption,
+            "caption" => $tagCaption == [""] ? null :  $request->tag_caption,
         ]);
 
         foreach ($tagCaption as $item) {
@@ -112,20 +113,21 @@ class PostController extends Controller
             'caption' => 'nullable|string|max:255',
             'tag' => 'nullable|string|max:30|unique:tags',
         ]);
-       Post::findOrFail($post->id)->update([
+        Post::findOrFail($post->id)->update([
             "caption" => $request->caption,
         ]);
         $tags = explode('#', $request->tag);
         foreach ($tags as $tagItem) {
-        $tag = Tag::where('tag',$tagItem)->get();
-           if ($tag->isEmpty()) {
-            $tag = Tag::create([
-                'tag' => $tagItem
-            ]);}
-        Posts_tag::create([
-            'tag_id' => $tag->first()->id,
-            'post_id' => $post->id,
-        ]);
+            $tag = Tag::where('tag', $tagItem)->get();
+            if ($tag->isEmpty()) {
+                $tag = Tag::create([
+                    'tag' => $tagItem
+                ]);
+            }
+            Posts_tag::create([
+                'tag_id' => $tag->first()->id,
+                'post_id' => $post->id,
+            ]);
         }
         return redirect()->route('posts.index');
     }
