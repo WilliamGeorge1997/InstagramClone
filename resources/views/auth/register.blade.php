@@ -1,3 +1,19 @@
+<html>
+
+<head>
+    <title>Instagram Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <link href="https://db.onlinewebfonts.com/c/6d32b8e06f40fb7698cfb714b9e7975d?family=Billabong+W00+Regular"
+        rel="stylesheet">
+    <link rel="shortcut icon" href="https://seeklogo.com/images/I/instagram-logo-1494D6FE63-seeklogo.com.png" type="image/x-icon">
+
+
+</head>
+
+</html>
+
 <x-guest-layout>
     {{-- !logo --}}
     <div aria-disabled="false" role="button" tabindex="0" style="cursor: pointer;" class=" mb-2 text-center">

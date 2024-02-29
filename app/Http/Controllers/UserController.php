@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\User;
 use App\Models\Block;
 use App\Models\Profile;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
@@ -25,16 +26,22 @@ class UserController extends Controller
     }
 
     public function search()
-    {
-        $searchQuery = request('search');
-        if ($searchQuery) {
-            $users = User::where('username', 'like', '%' . $searchQuery . '%')->get();
-            return view('users.search', ['users' => $users, 'searchQuery' => $searchQuery]);
-        } else {
-            $users = User::all();
-            return view('users.search', ['users' => $users]);
-        }
+{
+    $searchQuery = request('search');
+
+    if ($searchQuery) {
+        $users = User::where('username', 'like', '%' . $searchQuery . '%')
+            ->with('profiles')->get();
+
+        return view('users.search', ['users' => $users, 'searchQuery' => $searchQuery]);
+    } else {
+
+        $users = [];
+        return view('users.search', ['users' => $users]);
     }
+}
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -82,8 +89,11 @@ class UserController extends Controller
         $user = User::find($id);
         $profileInfo = Profile::where('user_id', $id)->get();
         $followController = app(FollowStatusController::class);
-        $followCountData = $followController->followCount($id);
-        return view('users.userprofile', ['user' => $user, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
+        $followCountData = $followController->followCount($user->id);
+        $posts = Post::with('user', 'media', 'tags')
+        ->where('user_id', $id)
+        ->get();
+        return view('users.userprofile', ['user' => $user, 'posts' => $posts, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
     }
 
     /**
@@ -112,15 +122,19 @@ class UserController extends Controller
             $request->validate([
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
             ]);
-            // if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
-            // $path = $request->file('avatar')->store('avatars', 'public');
+            if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+                $path = $request->file('avatar')->store('avatars', 'public');
+                Profile::where('user_id', $id)->update([
+                    'avatar' => $path
+                ]);
+                }
             Profile::where('user_id', $id)->update([
                 'gender' => $request->gender,
                 'website' => $request->website,
                 'bio' => $request->bio,
-                // 'avatar' => $path
             ]);
-
+            
+            
             User::where('id', $id)->update([
                 'email' => $request->email,
                 'username' => $request->username,
@@ -133,7 +147,9 @@ class UserController extends Controller
                 ]);
             }
             return redirect()->route('users.show', auth()->id());
-        } else {
+        } 
+        else 
+        {
             return redirect()->route('users.show', auth()->id());
         }
     }

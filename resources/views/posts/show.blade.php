@@ -1,36 +1,88 @@
-@extends('layouts.main')
-@section('title', 'posts')
+@extends('layouts.profile')
+@section('title', 'Show Post')
 @section('style')
     <link rel="stylesheet" href="{{ asset('css/posts.css') }}">
 @endsection
 @section('content')
 
     {{-- ======================================================================================== --}}
-    <div class="post-container  w-100">
+    <div class="w-100 p-4 d-flex align-items-center justify-content-center vh-100">
 
         <div class="row row-cols-md-2">
-            <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    @foreach ($post->media as $medium)
-                        <div class="carousel-item active">
-                            <img src="{{ asset('storage/' . $medium->media) }}" class="d-block mt-2 post-image"
-                                alt="...">
-                        </div>
-                    @endforeach
+            <div>
+                @if ($post->media->count() > 1)
+                <div id="carouselExampleIndicators" class="carousel slide">
+                    <div class="carousel-indicators">
+                        @foreach ($post->media as $key => $medium)
+                            <button type="button" data-bs-target="#carouselExampleIndicators"
+                                data-bs-slide-to="{{ $key }}" {{ $key == 0 ? 'class=active' : '' }}
+                                aria-label="Slide {{ $key + 1 }}"></button>
+                        @endforeach
+                    </div>
+                    <div class="carousel-inner">
+                        @foreach ($post->media as $key => $medium)
+                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                @php
+                                    $extension = pathinfo($medium->media, PATHINFO_EXTENSION);
+                                @endphp
+                                @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
+                                    <img src="{{ Storage::url($medium->media) }}" class="d-block post-image w-100"
+                                        style="object-fit: cover; max-height: 500px;min-height:300px" alt="...">
+                                @elseif (in_array($extension, ['mp4', 'mov', 'avi', 'wmv']))
+                                    <video class="d-block post-video w-100"
+                                        style="object-fit: cover; max-height: 500px;min-height:300px" autoplay muted loop>
+                                        <source src="{{ Storage::url($medium->media) }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
+                @else
+                <div>
+                    @php
+                        $extension = pathinfo($post->media->first()->media, PATHINFO_EXTENSION);
+
+                    @endphp
+                    @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
+                        <img src="{{ Storage::url($post->media->first()->media) }}" class="d-block post-image w-100"
+                            style="object-fit: cover; max-height: 500px;min-height:300px" alt="...">
+                    @elseif (in_array($extension, ['mp4', 'mov', 'avi', 'wmv']))
+                        <video class="d-block post-video w-100"
+                            style="object-fit: cover; max-height: 500px;min-height:300px" autoplay muted loop>
+                            <source src="{{ Storage::url($post->media->first()->media) }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    @endif
+                </div>
+                @endif
             </div>
+
             <div>
                 <div class="post-header justify-content-between">
-                    <div> <img class="profile-pic"
-                            src="https://e0.pxfuel.com/wallpapers/41/351/desktop-wallpaper-kumpulan-luffy-smiling-luffy-smile.jpg "
-                            alt="Profile Picture">
-                        <span class="username">{{ $post->user->username }}</span>
+                    <div>
+                        <a href="{{ route('users.show', $post->user->id) }}"class="text-decoration-none text-black">
+                            <img class="profile-pic"
+                                src="https://e0.pxfuel.com/wallpapers/41/351/desktop-wallpaper-kumpulan-luffy-smiling-luffy-smile.jpg "
+                                alt="Profile Picture">
+                            <span class="username">{{ $post->user->username }}</span>
+                        </a>
                     </div>
-                    <a href="{{ route('posts.edit', ['post' => $post->id]) }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="5" viewBox="0 0 128 512">
-                            <path
-                                d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                        </svg></a>
+                    @if ($post->user->id === Auth::user()->id)
+                        <a href="{{ route('posts.edit', ['post' => $post->id]) }}">
+                            <i class="fa-regular fa-pen-to-square text-black text-decoration-none"></i></a>
+                    @endif
                 </div>
                 <div>comntaaaatttt</div>
                 <div class="likes-comments">
@@ -68,10 +120,22 @@
                 </div>
                 <div class="likes"><span>10 Likes</span></div>
                 <div class="post-caption">
-                    <span class="username">{{ $post->user->username }}</span> {{ $post->caption }}
-                    @foreach ($post->tags as $tagBody)
-                        <a href="{{ route('posts.tag', ['tag' => $tagBody->id]) }}">#{{ $tagBody->tag }}</a>
+                    <span class="username">{{ $post->user->username }}</span>
+                    @php
+                        $tagCaption = explode(' ', $post->caption);
+                        $j = 0;
+                    @endphp
+                    @foreach ($tagCaption as $word)
+                        @if (Str::startsWith($word, '#'))
+                            <a href="{{ route('posts.tag', ['tag' => $post->tags[$j]->id]) }}">{{ $word }}</a>
+                            @php
+                                $j++;
+                            @endphp
+                        @else
+                            {{ $word }}
+                        @endif
                     @endforeach
+
                 </div>
                 <form action="" method="" class="comment-container d-flex">
                     <textarea name="comment" placeholder="Add a comment..." class="comment p-1" id="comment" cols="1"
