@@ -1,11 +1,10 @@
-
     @extends('layouts.profile')
     @section('title', 'Edit Profile')
     @section('content')
-        <div class="row justify-content-center mt-5">
+    
+        <div class="row justify-content-center mt-4">
             <div class="col-md-8">
                 <div class="card w-100">
-
                     {{-- <div class="card-header">Edit Profile</div> --}}
                     <div class="card-body ">
                         <form action=" {{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
@@ -29,67 +28,66 @@
                             </div>
 
                             {{-- ! username  --}}
-                            <div class="form-floating mb-3">
+                            <div class="form-floating mb-2">
                                 <input type="text" class="form-control" name="username" value="{{ $user->username }}">
                                 <label for="floatingSelect">User name</label>
                             </div>
 
                             {{-- ! email  --}}
-                            <div class=" form-floating mb-3">
+                            <div class=" form-floating mb-2">
                                 <input type="email" class="form-control" name="email" value="{{ $user->email }}">
                                 <label for="floatingSelect">Email</label>
                             </div>
 
                             {{-- ! phone  --}}
-                            <div class="form-floating mb-3">
+                            <div class="form-floating mb-2">
                                 <input type="text" class="form-control" name="phone" value="{{ $user->phone }}">
                                 <label for="floatingSelect">Phone</label>
                             </div>
 
                             {{-- ! password  --}}
-                            <div class=" form-floating mb-3">
-                                <input type="text" class="form-control" name="password">
+                            <div class=" form-floating mb-2">
+                                <input type="password" class="form-control" name="password">
                                 <label for="floatingSelect">Password</label>
-                            </div>
+                                @if ($errors->has('password'))
+                                <div class="alert alert-danger mt-2" role="alert">
+                                    @foreach ($errors->get('password') as $error)
+                                        {{ $error }}
+                                    @endforeach
+                                </div>
+                            @endif
+                                                        </div>
 
                             {{-- ! gender select  --}}
-                            <div class="  mb-3">
+                            <div class="  mb-2">
                                 <div class="form-floating">
-
-
                                     <select class="form-select" name="gender">
                                         <option value="">Select your gender</option>
                                         <option value="male" @if ($profileInfo->first()->gender == 'male') selected @endif>male
                                         </option>
                                         <option value="female" @if ($profileInfo->first()->gender == 'female') selected @endif>female
                                         </option>
-
-
                                     </select>
                                     <label for="floatingSelect">Gender</label>
                                 </div>
                             </div>
 
                             {{-- ! bio  --}}
-                            <div class=" form-floating mb-3">
+                            <div class=" form-floating mb-2">
                                 <textarea class="form-control d-flex" id="bio" style="resize: none" rows="3" name ="bio"
                                     placeholder="Enter your bio">{{ $profileInfo->first()->bio }}</textarea>
                                 <label for="floatingSelect"> Enter your bio</label>
                             </div>
 
                             {{-- ! website  --}}
-                            <div class=" form-floating mb-3">
+                            <div class=" form-floating mb-2">
                                 <input type="text" class="form-control" name="website" placeholder="Website"
                                     value="{{ $profileInfo->first()->website }}">
                                 <label for="floatingSelect">Enter your Website</label>
                             </div>
-
                             <input type="submit" class="btn btn-primary" name="submit">
                         </form>
                     </div>
                 </div>
             </div>
-
-        </div>
-    @endsection
-
+        @endsection

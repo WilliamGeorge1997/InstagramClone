@@ -4,80 +4,89 @@
  <link rel="stylesheet" href="{{ asset('css/posts.css') }}">
  <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
 @endsection
-    @section('content')
-    <div class=" mt-5 mx-auto">
-                <div class="row align-items-center">
-                    <div class="col-md-3">
-                        <!-- Profile Picture -->
-                        <div class="text-center">
-                            <img src="{{ $profileInfo->first()->avatar ? Storage::url($profileInfo->first()->avatar) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' }}"
-                                alt="Profile Picture" class="rounded-circle" style=" width: 150px; height: 150px;">
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <!-- Username -->
-                        <section class="d-flex flex-column mb-3">
-                            <div class="row align-items-center">
-                                <span class="fs-4 col-4">{{ $user->username }}</span>
-                                <!-- Edit Profile Button -->
-                                {{-- Follow/Unfollow button --}}
+ @section('content')
 
-                         @if (auth()->check() && auth()->user()->id !== $user->id)
-                             @if (auth()->user()->isFollowing($user))
-                                 {{-- Unfollow button --}}
-                                 <form action="{{ route('users.unfollow', $user->id) }}" method="post" class="d-inline">
-                                     @csrf
-                                     @method('delete')
-                                     <button type="submit" class="btn btn-danger col-2">Unfollow</button>
-                                 </form>
+     <section class=" row mt-5 flex-nowrap">
+         <!-- Profile Picture -->
+         <div class="col-md-4">
+            <img src="{{ $profileInfo->first()->avatar ? Storage::url($profileInfo->first()->avatar) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' }}"
+            alt="Profile Picture" class="rounded-circle" style=" width: 150px; height: 150px;">
+         </div>
+         <div class="col-md-8">
+             <div class="d-flex  align-items-center">
+                 <!-- Username -->
+                 <span class="fs-4 me-4 text-start">{{ $user->username }}</span>
+                 {{-- !Follow/Unfollow button --}}
+                 @if (auth()->check() && auth()->user()->id !== $user->id)
+                     @if (auth()->user()->isFollowing($user))
+                         {{-- Unfollow button --}}
+                         <form action="{{ route('users.unfollow', $user->id) }}" method="post" class="d-inline mx-3">
+                             @csrf
+                             @method('delete')
+                             <button type="submit" class="btn btn-danger">Unfollow</button>
+                         </form>
+                     @else
+                         {{-- ! Follow/Follow Back button --}}
+                         <form action="{{ route('users.follow', $user->id) }}" method="post" class="d-inline">
+                             @csrf
+                             @if ($user->isFollowing(auth()->user()))
+                                 <button type="submit" class="btn btn-success ">Follow Back</button>
                              @else
-                                 {{-- Follow/Follow Back button --}}
-                                 <form action="{{ route('users.follow', $user->id) }}" method="post" class="d-inline">
-                                     @csrf
-
-                                     @if ($user->isFollowing(auth()->user()))
-                                         <button type="submit" class="btn btn-success col-2">Follow Back</button>
-                                     @else
-                                         <button type="submit" class="btn btn-primary col-2">Follow</button>
-                                     @endif
-
-                                 </form>
+                                 <button type="submit" class="btn btn-primary ">Follow</button>
                              @endif
-                         @endif
+                         </form>
+                     @endif
+                 @endif
+                 {{-- !Edit Profile Button --}}
+                 @if (Auth::check() && $user->id == Auth::user()->id)
+                     <!-- Edit Profile Button -->
+                     <a href=" {{ route('users.edit', $user->id) }}"><button class=" mx-3 btn btn-primary">
+                             Edit Profile</button></a>
+                 @endif
+                 {{-- !Block/Unblock button --}}
+                 @if (Auth::check() && $user->id !== Auth::user()->id)
+                     <form method="POST" action="{{ route('users.block', $user->id) }}" class="mx-3">
+                         @csrf
+                         {{-- @if (auth()->user()->isBlockedBy($user))
+                                         <button type="submit" class="btn btn-danger">Unblock</button>
+                                     @else --}}
+                         <button type="submit" class="btn btn-danger px-4">Block</button>
+                         {{-- @endif --}}
+                     </form>
+                 @endif
+                 {{-- !displaying blocked users button  --}}
+                 @if (Auth::check() && $user->id == Auth::user()->id)
+                     <a href="{{ route('users.blocked', $user->id) }}"><button class="mx-3 btn btn-primary">Blocked
+                             Users</button></a>
+                 @endif
+             </div>
+             {{-- ! Posts, Followers, Following count --}}
+             <div class="d-flex mt-3 ">
+                 <!-- Posts -->
+                 <p class="me-4 text-start">{{ count($posts) }} <strong>Posts</strong> </p>
+                 <!-- Followers, Following, Posts -->
+                 <!-- Followers -->
+                 <p class="mx-4 ms-2 text-start"> {{ $followCountData['followersCount'] }} <strong><a
+                             class="text-decoration-none text-muted" href="{{ route('users.followers', $user->id) }}">
+                             Followers
+                         </a></strong></p>
+                 <!-- Following -->
+                 <p class="mx-4 ms-2 text-start"> {{ $followCountData['followingCount'] }} <strong><a
+                             class="text-decoration-none text-muted" href="{{ route('users.followings', $user->id) }}">
+                             Following
+                         </a></strong></p>
+             </div>
 
-                         <a href=" {{ route('users.edit', $user->id) }}" class="btn btn-primary col-2">Edit
-                             Profile</a>
-                     </div>
-                     <div class="row mt-3">
-                         <div class="col">
-                             <!-- Posts -->
-                             <p>{{ count($posts) }} <strong>Posts</strong> </p>
-                         </div>
-                         <!-- Followers, Following, Posts -->
-                         <div class="col">
-                             <!-- Followers -->
-                             <p><strong><a class="text-decoration-none text-muted"
-                                         href="{{ route('users.followers', $user->id) }}">Followers:
-                                         {{ $followCountData['followersCount'] }}</a></strong></p>
-                         </div>
-                         <div class="col">
-                             <!-- Following -->
-                             <p><strong><a class="text-decoration-none text-muted"
-                                         href="{{ route('users.followings', $user->id) }}">Following:
-                                         {{ $followCountData['followingCount'] }}</a></strong></p>
-                         </div>
-                     </div>
-                 </section>
-                 <!-- Bio -->
+             {{-- ! Bio  --}}
+             <div>
                  <p class="m-0 text-start"> {{ $profileInfo->first()->bio ? $profileInfo->first()->bio : '' }} </p>
                  <p class="m-0 text-start">{{ $profileInfo->first()->website ? $profileInfo->first()->website : '' }}</p>
                  <p class="m-0 text-start">{{ $profileInfo->first()->gender ? $profileInfo->first()->gender : '' }}</p>
              </div>
-             <hr class="mt-3">
-
          </div>
-         <hr class="mt-3">
-     </div>
+         </div>
+     </section>
+     <hr class="mt-3">
 
      @if (count($posts) == 0)
          <div class="d-flex justify-content-center align-items-center w-100 h-100">
