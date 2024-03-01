@@ -23,10 +23,14 @@ class PostController extends Controller
     public function index()
     {
         $authUser = auth()->user();
-        $user = User::find($authUser->id);
-        $followingUserIds = $user->followings()->pluck('followable_id');
-        $posts = Post::with(['user.profiles', 'media', 'tags', 'likes'])->whereIn('user_id', $followingUserIds)->orderBy('created_at', 'desc')->get();
-
+         $user = User::find($authUser->id);
+        $posts = Post::with(['user.profiles', 'media', 'tags', 'likes'])
+        ->where(function ($query) use ($user) {
+        $query->whereIn('user_id', $user->followings()->pluck('followable_id'))
+              ->orWhere('user_id', $user->id);
+    })
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         $user = Auth::user();
         $postsAll = Post::with('user.profiles', 'media', 'tags', 'likes', 'comments')->get();
@@ -57,7 +61,7 @@ class PostController extends Controller
             'media.*' => 'file|mimes:jpeg,jpg,png,gif,mp4|max:90480',
         ]);
         $paths = [];
-        
+
         if ($request->file('media')) {
             foreach ($request->file('media') as $image) {
                 $paths[] = $image->store('post_media', 'public');
@@ -108,7 +112,7 @@ class PostController extends Controller
     public function show(string $id)
     {
         $user = Auth::user();
-        $posts = Post::with('user', 'media', 'tags' , 'user.profiles')->find($id);
+        $posts = Post::with('user', 'media', 'tags' , 'likes', 'user.profiles')->find($id);
         $comments = Comment::where('post_id', $posts->id)->get();
         return view('posts.show', ['post' => $posts, 'comments' => $comments, 'user' => $user]);
     }
@@ -154,7 +158,7 @@ class PostController extends Controller
     public function tag(string $id)
     {
 
-        $posts = Post::with('user', 'media', 'tags')
+        $posts = Post::with('user', 'media', 'tags','likes')
             ->whereHas('tags', function ($query) use ($id) {
                 $query->where('tags.id', $id);
             })->orderBy('created_at', 'desc')
@@ -185,7 +189,7 @@ class PostController extends Controller
         $authUser = auth()->user();
         $user = User::find($authUser->id);
         $followingUserIds = $user->followings()->pluck('followable_id');
- 
+
         $savedPosts = $user->saved_posts()
             ->with([
                 'post.comments.users',
