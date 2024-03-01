@@ -84,7 +84,41 @@
              </div>
          </div>
      </section>
+
      <hr class="mt-3">
+     <!-- ----------------------- Saved posts------------------------------------- -->
+     <div class="container text-center mt-1">
+
+         <a href="{{ route('users.show', auth()->id()) }}" style="text-decoration: none; color: black;">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                 <rect fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                     stroke-width="2" width="18" x="3" y="3"></rect>
+                 <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                     x1="9.015" x2="9.015" y1="3" y2="21"></line>
+                 <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                     x1="14.985" x2="14.985" y1="3" y2="21"></line>
+                 <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                     x1="21" x2="3" y1="9.015" y2="9.015"></line>
+                 <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                     x1="21" x2="3" y1="14.985" y2="14.985"></line>
+             </svg> Posts
+
+
+             <a href="{{ route('posts.saved-posts') }}"  class="ms-3" style="text-decoration: none; color: black;">
+                 <span class="save-btn">
+                     <svg aria-label="Save" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24"
+                         role="img" viewBox="0 0 24 24" width="24">
+                         <title>Saved</title>
+                         <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor"
+                             stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polygon>
+                     </svg>
+                 </span>
+                 Saved
+             </a>
+         </a>
+         <hr class="mt-3 w-50 mx-auto w-50">
+     </div>
+     <!-- --------------------The end of saved posts------------------------------- -->
 
      @if (count($posts) == 0)
          <div class="d-flex justify-content-center align-items-center w-100 h-100">

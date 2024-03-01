@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\Saved_Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SavedPostController extends Controller
 {
@@ -11,54 +14,43 @@ class SavedPostController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+        $savedPosts = $user->saved_posts()->with('post.comments.users')->get();
+        return view('saved_posts.index', compact('savedPosts'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'post_id' => 'required|exists:posts,id',
+        ]);
+
+        $user = Auth::user();
+        
+        if ($user->saved_posts()->where('post_id', $request->post_id)->exists()) {
+            // The user has already saved the post
+            return redirect()->back()->with('error', 'You have already saved this post.');
+        } else {
+            // The user has not saved the post before, proceed with saving it
+            $savedPost = new Saved_Post();
+            $savedPost->user_id = $request->user_id;
+            $savedPost->post_id = $request->post_id;
+            $savedPost->save();
+            return redirect()->back()->with('success', 'Post saved successfully.');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(string $postId)
     {
-        //
+        $user = Auth::user();
+        $savedPosts = $user->saved_posts()->where('post_id', $postId)->get();
+
+        foreach ($savedPosts as $savedPost) {
+            
+            $savedPost->delete();
+        }
+        return redirect()->back()->with('success', 'All saved posts removed for this post!');
+    }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-}
