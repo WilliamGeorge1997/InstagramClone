@@ -113,43 +113,38 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
         $user = User::find($id);
         if (auth()->id() == $user->id) {
             $rules = [
                 'password' => 'nullable|string|min:8',
             ];
-            $request->validate([
-                'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            ]);
+            $request->validate($rules);
+
+
             if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
                 $path = $request->file('avatar')->store('avatars', 'public');
                 Profile::where('user_id', $id)->update([
                     'avatar' => $path
                 ]);
                 }
+
             Profile::where('user_id', $id)->update([
                 'gender' => $request->gender,
                 'website' => $request->website,
                 'bio' => $request->bio,
             ]);
-            
-            
             User::where('id', $id)->update([
                 'email' => $request->email,
                 'username' => $request->username,
                 'phone' => $request->phone,
             ]);
-
-            if ($request->password) {
+            if ($request-> filled('password')) {
                 User::where('id', $id)->update([
                     'password' => Hash::make($request->password),
                 ]);
             }
             return redirect()->route('users.show', auth()->id());
-        } 
-        else 
-        {
+        }else{
             return redirect()->route('users.show', auth()->id());
         }
     }

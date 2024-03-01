@@ -40,6 +40,7 @@
                                     @endif
                                 </div>
                                 <input type="hidden" name="param{{ $key }}" value="{{ $medium }}">
+                                {{dd($medium)}}
                             @endforeach
                         </div>
 
@@ -58,7 +59,6 @@
                     <div>
                         @php
                             $extension = pathinfo($paths[0], PATHINFO_EXTENSION);
-
                         @endphp
                         @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
                             <img src="{{ Storage::url($paths[0]) }}" class="d-block post-image w-100"
