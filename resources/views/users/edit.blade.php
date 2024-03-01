@@ -16,6 +16,7 @@
                                     <img src=" {{ $profileInfo->first()->avatar ? Storage::url($profileInfo->first()->avatar) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' }}"
                                         alt="Profile Picture" class="rounded-circle" style=" width: 75px; height: 75px;">
                                     <span class="ms-2 fs-5 fw-bold">{{ $user->username }}</span>
+                                    
                                 </div>
 
                                 <div class=" d-md-flex justify-content-md-end">
@@ -48,13 +49,11 @@
                             <div class=" form-floating mb-2">
                                 <input type="password" class="form-control" name="password">
                                 <label for="floatingSelect">Password</label>
-                                {{-- @if ($errors->has('password')) --}}
-                                <div class="alert alert-danger mt-2" role="alert">
-                                    {{-- @foreach ($errors->get('password') as $error)
-                                        {{ $error }}
-                                    @endforeach --}}
-                                </div>
-                                {{-- @endif --}}
+                                @if ($errors->has('password'))
+                                    <div class="alert alert-danger mt-2" role="alert">
+                                        {{ $errors->first('password') }}
+                                    </div>
+                                @endif
                             </div>
 
                             {{-- ! gender select  --}}

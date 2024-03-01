@@ -48,6 +48,7 @@ class PostController extends Controller
             'media.*' => 'file|mimes:jpeg,jpg,png,gif,mp4|max:90480',
         ]);
         $paths = [];
+        
         if ($request->file('media')) {
             foreach ($request->file('media') as $image) {
                 $paths[] = $image->store('post_media', 'public');
