@@ -90,7 +90,7 @@ class UserController extends Controller
         $profileInfo = Profile::where('user_id', $id)->get();
         $followController = app(FollowStatusController::class);
         $followCountData = $followController->followCount($user->id);
-        $posts = Post::with('user', 'media', 'tags')
+        $posts = Post::with('user', 'media', 'tags','likes')
         ->where('user_id', $id)
         ->get();
         return view('users.userprofile', ['user' => $user, 'posts' => $posts, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
@@ -133,8 +133,8 @@ class UserController extends Controller
                 'website' => $request->website,
                 'bio' => $request->bio,
             ]);
-            
-            
+
+
             User::where('id', $id)->update([
                 'email' => $request->email,
                 'username' => $request->username,
@@ -147,8 +147,8 @@ class UserController extends Controller
                 ]);
             }
             return redirect()->route('users.show', auth()->id());
-        } 
-        else 
+        }
+        else
         {
             return redirect()->route('users.show', auth()->id());
         }

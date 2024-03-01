@@ -137,8 +137,8 @@
                 </form>
             </div>
         </div>
-        <div class="likes"><span>
-            {{ $post->likes->count() }}  @if($post->likes_count == 1) Like @else Likes @endif</span></div>
+        <div class="likes fw-bold"><span>
+            {{ $post->likes->count() }}  @if($post->likes->count() == 1) Like @else Likes @endif</span></div>
         <div class="post-caption">
             <span class="username">{{ $post->user->username }}</span>
             @php
@@ -162,7 +162,9 @@
                 rows="1"></textarea>
             <button class="btn text-primary">Post</button>
         </form>
+        <hr>
     </div>
+
 @endforeach
 
 @endif

@@ -84,7 +84,7 @@
                  <p class="m-0 text-start">{{ $profileInfo->first()->gender ? $profileInfo->first()->gender : '' }}</p>
              </div>
          </div>
-         </div>
+         
      </section>
      <hr class="mt-3">
 
@@ -164,7 +164,7 @@
                                     "
                                          style=" top: 5%; right: 5%;position:absolute;"></i></div>
                                  <div>
-                                     <i class="fa-solid fa-heart m-2"></i><span>344</span>
+                                     <i class="fa-solid fa-heart m-2"></i><span>{{ $post->likes->count() }}</span>
                                      <i class="fa-solid fa-comment m-2"></i><span>677</span>
                                  </div>
                              </div>

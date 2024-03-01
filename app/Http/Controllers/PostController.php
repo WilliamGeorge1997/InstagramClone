@@ -20,16 +20,21 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $authUser = auth()->user();
-        $user = User::find($authUser->id);
-        $followingUserIds = $user->followings()->pluck('followable_id');
-        $posts = Post::with(['user.profiles', 'media', 'tags', 'likes'])->whereIn('user_id', $followingUserIds)->orderBy('created_at', 'desc')->get();
 
-
+     public function index()
+     {
+         $authUser = auth()->user();
+         $user = User::find($authUser->id);
+        $posts = Post::with(['user.profiles', 'media', 'tags', 'likes'])
+        ->where(function ($query) use ($user) {
+        $query->whereIn('user_id', $user->followings()->pluck('followable_id'))
+              ->orWhere('user_id', $user->id);
+    })
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('posts.index', ['posts' => $posts]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -96,7 +101,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $posts = Post::with('user', 'media', 'tags')->find($id);
+        $posts = Post::with('user', 'media', 'tags', 'likes')->find($id);
         return view('posts.show', ['post' => $posts]);
     }
     /**
@@ -140,7 +145,7 @@ class PostController extends Controller
     public function tag(string $id)
     {
 
-        $posts = Post::with('user', 'media', 'tags')
+        $posts = Post::with('user', 'media', 'tags','likes')
             ->whereHas('tags', function ($query) use ($id) {
                 $query->where('tags.id', $id);
             })->orderBy('created_at', 'desc')
