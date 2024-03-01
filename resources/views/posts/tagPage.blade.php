@@ -10,8 +10,7 @@
     <div class="row align-items-center">
         <div class="col-md-3 col-12">
             <div class="text-center">
-                <img src="{{ Storage::url( $posts->first()->media->first()->media) }}" alt="Tag Picture"
-                    class="rounded-circle" style=" width: 150px; height: 150px;">
+                <img src="{{ in_array(pathinfo($posts->first()->media->first()->media, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']) ? Storage::url($posts->first()->media->first()->media) : 'https://upload.wikimedia.org/wikipedia/commons/6/63/Number_sign.svg' }}" alt="Tag Picture" class="rounded-circle" style="width: 150px; height: 150px;">
             </div>
         </div>
         <div class="col-md-9  px-5 text-start col-12">

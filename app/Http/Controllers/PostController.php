@@ -40,6 +40,7 @@ class PostController extends Controller
         return view('posts.index', ['posts' => $posts, 'user' => $user, 'lastThreeComments' => $lastThreeComments]);
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -56,6 +57,7 @@ class PostController extends Controller
             'media.*' => 'file|mimes:jpeg,jpg,png,gif,mp4|max:90480',
         ]);
         $paths = [];
+        
         if ($request->file('media')) {
             foreach ($request->file('media') as $image) {
                 $paths[] = $image->store('post_media', 'public');
@@ -171,7 +173,7 @@ class PostController extends Controller
             ->get();
         $posts = Post::with('user', 'media', 'tags')
             ->where('user_id', $id)
-            ->orderBy('timestamp', 'desc') // Assuming 'timestamp' is the name of the attribute
+            ->orderBy('timestamp', 'desc')
             ->get();
         return view('posts.profile', [
             'posts' => $posts
