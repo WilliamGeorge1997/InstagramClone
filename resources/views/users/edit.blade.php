@@ -16,6 +16,7 @@
                                     <img src=" {{ $profileInfo->first()->avatar ? Storage::url($profileInfo->first()->avatar) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' }}"
                                         alt="Profile Picture" class="rounded-circle" style=" width: 75px; height: 75px;">
                                     <span class="ms-2 fs-5 fw-bold">{{ $user->username }}</span>
+                                    
                                 </div>
 
                                 <div class=" d-md-flex justify-content-md-end">

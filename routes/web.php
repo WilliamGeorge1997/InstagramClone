@@ -40,7 +40,8 @@ Route::middleware('auth')->group(function () {
 Route::get('posts/{tag}/tagPage', [PostController::class, 'tag'])->name('posts.tag');
 Route::get('posts/{id}/user', [PostController::class, 'postsByUserId'])->name('posts.profile');
 
-Route::post('posts/share', [PostController::class, 'share'])->name('posts.share');
+// Route::post('/share', [PostController::class, 'share'])->name('share');
+Route::match(['get', 'post'], 'share', [PostController::class, 'share'])->name('posts.share');
 
 Route::resource('posts', PostController::class);
 
@@ -56,11 +57,11 @@ Route::resource('users', UserController::class);
 Route::get('/users/{id}/followings', [FollowStatusController::class, 'followingUsers'])->name('users.followings');
 Route::get('/users/{id}/followers', [FollowStatusController::class, 'followerUsers'])->name('users.followers');
 
-Route::get('/users/{id}/followings', [FollowStatusController::class , 'followingUsers'])->name('users.followings');
-Route::get('/users/{id}/followers', [FollowStatusController::class , 'followerUsers'])->name('users.followers');
+Route::get('/users/{id}/followings', [FollowStatusController::class, 'followingUsers'])->name('users.followings');
+Route::get('/users/{id}/followers', [FollowStatusController::class, 'followerUsers'])->name('users.followers');
 
-    Route::post('/posts/{post}/like', [LikeController::class, 'likePost'])->name('posts.like');
-    Route::delete('/posts/{post}/unlike', [LikeController::class,'unlikePost'])->name('posts.unlike');
+Route::post('/posts/{post}/like', [LikeController::class, 'likePost'])->name('posts.like');
+Route::delete('/posts/{post}/unlike', [LikeController::class, 'unlikePost'])->name('posts.unlike');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
