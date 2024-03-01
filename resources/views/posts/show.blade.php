@@ -7,9 +7,8 @@
 
     {{-- ======================================================================================== --}}
     <div class="w-100 p-4 d-flex align-items-center justify-content-center vh-100">
-
-        <div class="row row-cols-md-2">
-            <div>
+        <div class="row vh-100 w-100 ali">
+            <div class="col-md-7">
                 @if ($post->media->count() > 1)
                 <div id="carouselExampleIndicators" class="carousel slide">
                     <div class="carousel-indicators">
@@ -27,10 +26,10 @@
                                 @endphp
                                 @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
                                     <img src="{{ Storage::url($medium->media) }}" class="d-block post-image w-100"
-                                        style="object-fit: cover; max-height: 500px;min-height:300px" alt="...">
+                                        style="object-fit: cover; height: 600px;" alt="...">
                                 @elseif (in_array($extension, ['mp4', 'mov', 'avi', 'wmv']))
                                     <video class="d-block post-video w-100"
-                                        style="object-fit: cover; max-height: 500px;min-height:300px" autoplay muted loop>
+                                        style="object-fit: cover;height: 600px;" autoplay muted loop>
                                         <source src="{{ Storage::url($medium->media) }}" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
@@ -50,17 +49,17 @@
                     </button>
                 </div>
                 @else
-                <div>
-                    @php
-                        $extension = pathinfo($post->media->first()->media, PATHINFO_EXTENSION);
+                    <div>
+                        @php
+                            $extension = pathinfo($post->media->first()->media, PATHINFO_EXTENSION);
 
                     @endphp
                     @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
                         <img src="{{ Storage::url($post->media->first()->media) }}" class="d-block post-image w-100"
-                            style="object-fit: cover; max-height: 500px;min-height:300px" alt="...">
+                            style="object-fit: cover;height:600px" alt="...">
                     @elseif (in_array($extension, ['mp4', 'mov', 'avi', 'wmv']))
                         <video class="d-block post-video w-100"
-                            style="object-fit: cover; max-height: 500px;min-height:300px" autoplay muted loop>
+                            style="object-fit: cover; height:600px" autoplay muted loop>
                             <source src="{{ Storage::url($post->media->first()->media) }}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -68,13 +67,12 @@
                 </div>
                 @endif
             </div>
-
-            <div>
+            <div class="col-md-5">
                 <div class="post-header justify-content-between">
                     <div>
                         <a href="{{ route('users.show', $post->user->id) }}"class="text-decoration-none text-black">
                             <img class="profile-pic"
-                                src="https://e0.pxfuel.com/wallpapers/41/351/desktop-wallpaper-kumpulan-luffy-smiling-luffy-smile.jpg "
+                             src="{{ $post->user->profiles->avatar ? Storage::url($post->user->profiles->avatar) : url('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png') }}"
                                 alt="Profile Picture">
                             <span class="username">{{ $post->user->username }}</span>
                         </a>
@@ -84,10 +82,84 @@
                             <i class="fa-regular fa-pen-to-square text-black text-decoration-none"></i></a>
                     @endif
                 </div>
-                <div>comntaaaatttt</div>
+               <!--  --------------------- ---The comment section-------------------------------------  -->
+                <div class="post-comments-container mt-3" style="max-height: 300px; overflow-y: auto;">
+                    @foreach ($comments as $comment)
+                        <div class="container mt-3">
+                            <ul class="list-unstyled">
+                                <li class="d-flex flex-column mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <!-- --------------profile picture--------------- -->
+                                        <div class="profile-picture me-3">
+                                            <img src="{{ $comment->users->profiles->avatar ? Storage::url($comment->users->profiles->avatar) : url('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png') }}"
+                                                alt="Profile Picture" class="img-fluid rounded-circle"
+                                                style="width: 32px; height: 32px;">
+                                        </div>
+
+                                        <!-- ------------------------Username---------------------- -->
+                                        <div>
+                                            <h5 class="mb-0">
+                                                <a
+                                                    href="{{ route('users.show', ['user' => $comment->user_id]) }}">{{ $comment->users->username }}</a>
+                                            </h5>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- ----------------------The comment body----------------------------- -->
+                                    <div class="mb-2">
+                                        <p class="mb-0">{{ $comment->body }}</p>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between">
+
+                                        <small class="text-muted">{{ $comment->timeAgo }}</small>
+
+                                        <!-- ---------------------Delete comment-------------------------------- -->
+
+                                        <form method="POST" action="{{ route('posts.comment.destroy', $comment->id) }}"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-link btn-sm text-danger p-0"
+                                                style="text-decoration: none;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor" width="16"
+                                                    height="16">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M3 6L5 6 21 6"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M9 6V3a1 1 0 011-1h4a1 1 0 011 1v3"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M16 10v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8m2 0h12m-2 0v-4a1 1 0 00-1-1h-2a1 1 0 00-1 1v4">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </form>
+
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- ---------------------Store comment-------------------------------- -->
+                <form action="{{ route('posts.comment.store', $post->id) }}" method="POST"
+                    class="comment-container d-flex">
+                    @csrf
+                    <textarea name="body" placeholder="Add a comment..." class="comment p-1" id="comment" cols="1"
+                        rows="1"></textarea>
+                    <input type="hidden" name="post_id" value="{{ $post->id }}">
+                    <input type="hidden" name="user_id" value="{{ $user->id }}">
+                    <button class="btn text-primary" type="submit">Post</button>
+                </form>
+
                 <div class="likes-comments">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex">
+
                             <form action="" method=""><span class="like-btn"><svg aria-label="Like"
                                         class="x1lliihq x1n2onr6 xyb1xck" fill="currentColor" height="24" role="img"
                                         viewBox="0 0 24 24" width="24">
@@ -97,25 +169,55 @@
                                         </path>
                                     </svg></span>
                             </form>
-                            <form action="">
-                                <span class="comment-btn"><svg aria-label="Comment" class="x1lliihq x1n2onr6 x5n08af"
-                                        fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
-                                        width="24">
-                                        <title>Comment</title>
-                                        <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none"
-                                            stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path>
-                                    </svg></span>
-                            </form>
+
+
                         </div>
-                        <form action="" method="">
-                            <span class="share-btn"><svg aria-label="Save" class="x1lliihq x1n2onr6 x5n08af"
-                                    fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
-                                    <title>Save</title>
-                                    <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21"
-                                        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"></polygon>
-                                </svg></span>
-                        </form>
+                        <!-- -------------------Save post section-------------------- -->
+                        @auth
+                            @if (auth()->user()->hasSaved($post->id))
+                                <!--  --------- Check if the post has been saved before , show unsave button ----------- -->
+                                <form action="{{ route('saved-posts.destroy', $post->id) }}" method="post"
+                                    id="unsaveForm{{ $post->id }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="border-0 p-0" style="background:none;">
+                                        <span class="save-btn">
+                                            <svg aria-label="Save" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor"
+                                                height="24" role="img" viewBox="0 0 24 24" width="24">
+                                                <title>Unsave</title>
+                                                <polygon fill="#000" points="20 21 12 13.44 4 21 4 3 20 3 20 21"
+                                                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2"></polygon>
+                                            </svg>
+                                        </span>
+                                    </button>
+
+                                </form>
+                            @else
+                                <!--  --------- The user has not save the post before , show save button ----------- -->
+                                <form action="{{ route('saved.posts.store', ['id' => $post->id]) }}" method="post"
+                                    id="saveForm{{ $post->id }}">
+                                    <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                                    @csrf
+
+                                    <button type="submit" class="border-0 p-0" style="background:none;">
+                                        <span class="save-btn">
+                                            <svg aria-label="Save" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor"
+                                                height="24" role="img" viewBox="0 0 24 24" width="24">
+                                                <title>Save</title>
+                                                <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21"
+                                                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2"></polygon>
+                                            </svg>
+                                        </span>
+                                    </button>
+
+                                </form>
+                            @endif
+                        @endauth
+                        <!-- -------------------The End Save post section-------------------- -->
+
                     </div>
                 </div>
                 <div class="likes"><span>10 Likes</span></div>
@@ -137,13 +239,10 @@
                     @endforeach
 
                 </div>
-                <form action="" method="" class="comment-container d-flex">
-                    <textarea name="comment" placeholder="Add a comment..." class="comment p-1" id="comment" cols="1"
-                        rows="1"></textarea>
-                    <button class="btn text-primary">Post</button>
-                    </from>
+
             </div>
         </div>
+
     </div>
 
 @endsection

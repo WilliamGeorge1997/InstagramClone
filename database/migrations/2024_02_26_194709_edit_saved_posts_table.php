@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('blocks', function (Blueprint $table) {
-            $table->timestamps();
+        Schema::table('saved_posts', function (Blueprint $table) {
+            $table->unique(['user_id', 'post_id']);
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('blocks', function (Blueprint $table) {
-            $table->dropColumn('created_at', 'updated_at');
+        Schema::table('saved_posts', function (Blueprint $table) {
+            $table->dropUnique(['user_id', 'post_id']);
         });
     }
 };

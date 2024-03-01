@@ -26,20 +26,20 @@ class UserController extends Controller
     }
 
     public function search()
-{
-    $searchQuery = request('search');
+    {
+        $searchQuery = request('search');
 
-    if ($searchQuery) {
-        $users = User::where('username', 'like', '%' . $searchQuery . '%')
-            ->with('profiles')->get();
+        if ($searchQuery) {
+            $users = User::where('username', 'like', '%' . $searchQuery . '%')
+                ->with('profiles')->get();
 
-        return view('users.search', ['users' => $users, 'searchQuery' => $searchQuery]);
-    } else {
+            return view('users.search', ['users' => $users, 'searchQuery' => $searchQuery]);
+        } else {
 
-        $users = [];
-        return view('users.search', ['users' => $users]);
+            $users = [];
+            return view('users.search', ['users' => $users]);
+        }
     }
-}
 
 
 
@@ -91,8 +91,9 @@ class UserController extends Controller
         $followController = app(FollowStatusController::class);
         $followCountData = $followController->followCount($user->id);
         $posts = Post::with('user', 'media', 'tags')
-        ->where('user_id', $id)
-        ->get();
+            ->where('user_id', $id)
+            ->orderBy('created_at', 'desc')->
+            get();
         return view('users.userprofile', ['user' => $user, 'posts' => $posts, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
     }
 
@@ -113,15 +114,14 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
         $user = User::find($id);
         if (auth()->id() == $user->id) {
             $rules = [
                 'password' => 'nullable|string|min:8',
             ];
-            $request->validate([
-                'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            ]);
+            $request->validate($rules);
+
+
             if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
                 $path = $request->file('avatar')->store('avatars', 'public');
                 Profile::where('user_id', $id)->update([
@@ -140,16 +140,13 @@ class UserController extends Controller
                 'username' => $request->username,
                 'phone' => $request->phone,
             ]);
-
-            if ($request->password) {
+            if ($request-> filled('password')) {
                 User::where('id', $id)->update([
                     'password' => Hash::make($request->password),
                 ]);
             }
             return redirect()->route('users.show', auth()->id());
-        } 
-        else 
-        {
+        }else{
             return redirect()->route('users.show', auth()->id());
         }
     }

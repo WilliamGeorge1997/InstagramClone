@@ -1,16 +1,15 @@
  @extends('layouts.profile')
- @section('title','User Profile')
+ @section('title', 'User Profile')
  @section('style')
- <link rel="stylesheet" href="{{ asset('css/posts.css') }}">
- <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
-@endsection
+     <link rel="stylesheet" href="{{ asset('css/posts.css') }}">
+     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+ @endsection
  @section('content')
-
      <section class=" row mt-5 flex-nowrap">
          <!-- Profile Picture -->
          <div class="col-md-4">
-            <img src="{{ $profileInfo->first()->avatar ? Storage::url($profileInfo->first()->avatar) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' }}"
-            alt="Profile Picture" class="rounded-circle" style=" width: 150px; height: 150px;">
+             <img src="{{ $profileInfo->first()->avatar ? Storage::url($profileInfo->first()->avatar) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' }}"
+                 alt="Profile Picture" class="rounded-circle" style=" width: 150px; height: 150px;">
          </div>
          <div class="col-md-8">
              <div class="d-flex  align-items-center">
@@ -84,9 +83,42 @@
                  <p class="m-0 text-start">{{ $profileInfo->first()->gender ? $profileInfo->first()->gender : '' }}</p>
              </div>
          </div>
-         </div>
      </section>
+
      <hr class="mt-3">
+     <!-- ----------------------- Saved posts------------------------------------- -->
+     <div class="container text-center mt-1">
+
+         <a href="{{ route('users.show', auth()->id()) }}" style="text-decoration: none; color: black;">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                 <rect fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                     stroke-width="2" width="18" x="3" y="3"></rect>
+                 <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                     x1="9.015" x2="9.015" y1="3" y2="21"></line>
+                 <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                     x1="14.985" x2="14.985" y1="3" y2="21"></line>
+                 <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                     x1="21" x2="3" y1="9.015" y2="9.015"></line>
+                 <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                     x1="21" x2="3" y1="14.985" y2="14.985"></line>
+             </svg> Posts
+
+
+             <a href="{{ route('posts.saved-posts') }}"  class="ms-3" style="text-decoration: none; color: black;">
+                 <span class="save-btn">
+                     <svg aria-label="Save" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24"
+                         role="img" viewBox="0 0 24 24" width="24">
+                         <title>Saved</title>
+                         <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor"
+                             stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polygon>
+                     </svg>
+                 </span>
+                 Saved
+             </a>
+         </a>
+         <hr class="mt-3 w-50 mx-auto w-50">
+     </div>
+     <!-- --------------------The end of saved posts------------------------------- -->
 
      @if (count($posts) == 0)
          <div class="d-flex justify-content-center align-items-center w-100 h-100">
@@ -99,17 +131,17 @@
                                      class="fa-solid fa-camera fs-1 text-black"></i></a>
                          </div>
                          <div
-                             class="x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh xqui205 x1hq5gj4 x1n2onr6 x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1">
+                             class="x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh xqui205 x1hq5gj4 x1n2onr6 x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1 text-center">
                              <span class="fw-bolder fs-1">Share
                                  Photos</span>
                          </div>
                          <div
-                             class="x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh x1hq5gj4 x1n2onr6 x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1">
+                             class="x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh x1hq5gj4 x1n2onr6 x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1 text-center">
                              <span>When
                                  you share photos, they will appear on your profile.</span>
                          </div>
                          <a href="{{ route('posts.create') }}" class="text-decoration-none">
-                             <div class="x1i10hfl xjqpnuy xa49m3k xqeqjp1 x2hbi6w xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x1lku1pv x1a2a7pz x6s0dn4 xjyslct x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 x1ypdohk x1f6kntn xwhw2v2 xl56j7k x17ydfre x2b8uid xlyipyv x87ps6o x14atkfc xcdnw81 x1i0vuye xjbqb8w xm3z3ea x1x8b98j x131883w x16mih1h x972fbf xcfux6l x1qhh985 xm0m39n xt7dq6l xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x1n5bzlp x173jzuc x1yc6y37 x3nfvp2"
+                             <div class="x1i10hfl xjqpnuy xa49m3k xqeqjp1 x2hbi6w xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x1lku1pv x1a2a7pz x6s0dn4 xjyslct x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 x1ypdohk x1f6kntn xwhw2v2 xl56j7k x17ydfre x2b8uid xlyipyv x87ps6o x14atkfc xcdnw81 x1i0vuye xjbqb8w xm3z3ea x1x8b98j x131883w x16mih1h x972fbf xcfux6l x1qhh985 xm0m39n xt7dq6l xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x1n5bzlp x173jzuc x1yc6y37 x3nfvp2 text-center"
                                  role="button" tabindex="0">Share your first photo</div>
                          </a>
                      </div>
@@ -122,7 +154,7 @@
                                  class="_9-z- _aa5a"></span></div>
                          <div
                              class="x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh xg87l8a x13ihpsm x1n2onr6 x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1">
-                             <span class="fw-bolder fs-1">No
+                             <span class="fw-bolder fs-1 ">No
                                  Posts Yet</span>
                          </div>
                      </div>
@@ -135,32 +167,27 @@
                  <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="m-0 p-1">
                      <div class="col ">
                          <div class="card border-0 position-relative post-disc ">
-                             @php
-                                 $extension = pathinfo($post->media->first()->media, PATHINFO_EXTENSION);
-                             @endphp
-                             @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
+
+         {{-- $extension = pathinfo($post->media->first()->media, PATHINFO_EXTENSION); --}}
+
+                             @if (in_array( pathinfo($post->media->first()->media, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif','webp']))
                                  <img src="{{ Storage::url($post->media->first()->media) }}"
-                                     class="d-block post-image w-100"
-                                     style="object-fit: cover;height:300px" alt="...">
-                             @elseif (in_array($extension, ['mp4', 'mov', 'avi', 'wmv']))
-                                 <video class="d-block post-image w-100"
-                                     style="object-fit: cover; height:300px" >
+                                     class="d-block post-image w-100" style="object-fit: cover;height:300px" alt="...">
+                             @elseif (in_array( pathinfo($post->media->first()->media, PATHINFO_EXTENSION), ['mp4', 'mov', 'avi', 'wmv']))
+                                 <video class="d-block post-image w-100" style="object-fit: cover; height:300px">
                                      <source src="{{ Storage::url($post->media->first()->media) }}" type="video/mp4">
                                      Your browser does not support the video tag.
                                  </video>
                              @endif
-
                              <div
                                  class="position-absolute gap-2 d-flex align-items-center justify-content-center text-white">
                                  <div><i class="
-                                    @if ($post->media->count() > 1)
-                                    fa-images fa-regular
-                                    @elseif (in_array($extension, ['mp4', 'mov', 'avi', 'wmv']))
+                                    @if ($post->media->count() > 1) fa-images fa-regular
+                                    @elseif (in_array( pathinfo($post->media->first()->media, PATHINFO_EXTENSION),  ['mp4', 'mov', 'avi', 'wmv']))
                                     fa-solid fa-clapperboard
-                                    @elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
+                                    @elseif (in_array( pathinfo($post->media->first()->media, PATHINFO_EXTENSION),  ['jpg', 'jpeg', 'png', 'gif']))
                                      fa-regular
-                                       fa-image
-                                    @endif
+                                       fa-image @endif
                                     "
                                          style=" top: 5%; right: 5%;position:absolute;"></i></div>
                                  <div>
