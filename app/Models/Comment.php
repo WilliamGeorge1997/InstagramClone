@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Comment extends Model
 {
@@ -16,7 +17,7 @@ class Comment extends Model
 
     public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class , 'user_id');
     }
 
     public function posts()
@@ -27,5 +28,11 @@ class Comment extends Model
     public function like_comments()
     {
         return $this->hasMany(Like_Comment::class);
+    }
+
+    public function getTimeAgoAttribute()
+    {
+        $createdAt = Carbon::parse($this->attributes['created_at']);
+        return $createdAt->diffForHumans();
     }
 }

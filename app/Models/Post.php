@@ -41,7 +41,6 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
-    //!-------- not sure if i need this relationship
     public function saved_posts()
     {
         return $this->belongsToMany(Saved_Post::class);

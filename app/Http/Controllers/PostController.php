@@ -28,7 +28,16 @@ class PostController extends Controller
         $posts = Post::with(['user.profiles', 'media', 'tags', 'likes'])->whereIn('user_id', $followingUserIds)->orderBy('created_at', 'desc')->get();
 
 
-        return view('posts.index', ['posts' => $posts]);
+        $user = Auth::user();
+        $postsAll = Post::with('user.profiles', 'media', 'tags', 'likes', 'comments')->get();
+        $lastThreeComments = [];
+
+        foreach ($postsAll as $post) {
+            $comments = $post->comments()->orderBy('created_at', 'desc')->take(3)->get();
+            $lastThreeComments[$post->id] = $comments;
+        }
+
+        return view('posts.index', ['posts' => $posts, 'user' => $user, 'lastThreeComments' => $lastThreeComments]);
     }
 
     /**
@@ -96,8 +105,10 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $posts = Post::with('user', 'media', 'tags')->find($id);
-        return view('posts.show', ['post' => $posts]);
+        $user = Auth::user();
+        $posts = Post::with('user', 'media', 'tags' , 'user.profiles')->find($id);
+        $comments = Comment::where('post_id', $posts->id)->get();
+        return view('posts.show', ['post' => $posts, 'comments' => $comments, 'user' => $user]);
     }
     /**
      * Show the form for editing the specified resource.
@@ -137,6 +148,7 @@ class PostController extends Controller
     {
         //
     }
+
     public function tag(string $id)
     {
 
@@ -164,5 +176,23 @@ class PostController extends Controller
         return view('posts.profile', [
             'posts' => $posts
         ]);
+    }
+
+    public function showSavedPosts()
+    {
+        $authUser = auth()->user();
+        $user = User::find($authUser->id);
+        $followingUserIds = $user->followings()->pluck('followable_id');
+ 
+        $savedPosts = $user->saved_posts()
+            ->with([
+                'post.comments.users',
+                'post.tags',
+                'post.media',
+                'post.user.profiles'
+            ])
+            ->get();
+
+        return view('saved_posts.index', compact('savedPosts', 'user',));
     }
 }

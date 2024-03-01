@@ -8,6 +8,7 @@ use App\Http\Controllers\BlockController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LikePostController;
+use App\Http\Controllers\SavedPostController;
 use App\Http\Controllers\FollowStatusController;
 
 /*
@@ -46,21 +47,20 @@ Route::resource('posts', PostController::class);
 
 
 
-Route::post('/posts/{post}/comment', [CommentController::class, 'store'])->name('posts.comment.store');
+
+
 
 Route::resource('users', UserController::class);
-
-
 
 
 Route::get('/users/{id}/followings', [FollowStatusController::class, 'followingUsers'])->name('users.followings');
 Route::get('/users/{id}/followers', [FollowStatusController::class, 'followerUsers'])->name('users.followers');
 
-Route::get('/users/{id}/followings', [FollowStatusController::class , 'followingUsers'])->name('users.followings');
-Route::get('/users/{id}/followers', [FollowStatusController::class , 'followerUsers'])->name('users.followers');
+Route::get('/users/{id}/followings', [FollowStatusController::class, 'followingUsers'])->name('users.followings');
+Route::get('/users/{id}/followers', [FollowStatusController::class, 'followerUsers'])->name('users.followers');
 
-    Route::post('/posts/{post}/like', [LikeController::class, 'likePost'])->name('posts.like');
-    Route::delete('/posts/{post}/unlike', [LikeController::class,'unlikePost'])->name('posts.unlike');
+Route::post('/posts/{post}/like', [LikeController::class, 'likePost'])->name('posts.like');
+Route::delete('/posts/{post}/unlike', [LikeController::class, 'unlikePost'])->name('posts.unlike');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
@@ -68,6 +68,23 @@ Route::middleware(['auth'])->group(function () {
     Route::post('users/{id}/block', [BlockController::class, 'blockUser'])->name('users.block');
     Route::get('users/{id}/blocked', [BlockController::class, 'showBlockedUsers'])->name('users.blocked');
     Route::DELETE('users/{id}/unblock', [BlockController::class, 'unblockUser'])->name('users.unblock');
+
+    // -------------------------- Comments ----------------------------
+    // comments for posts
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('posts.comment.destroy');
+
+    Route::post('/posts/{post}/comment', [CommentController::class, 'store'])->name('posts.comment.store');
+
+    // ----------------------------------- saved-posts -----------------------
+    // store saved post
+    Route::post('/posts/{id}/save', [SavedPostController::class, 'store'])->name('saved.posts.store');
+
+    // show saved posts
+    Route::get('/saved-posts',  [PostController::class, 'showSavedPosts'])->name('posts.saved-posts'); // middleware
+
+    // Delete saved post
+    Route::delete('/saved-posts/{id}', [SavedPostController::class, 'destroy'])->name('saved-posts.destroy'); // middleware
+
 });
 
 Route::get('/search', [UserController::class, 'search'])->name('users.search');
