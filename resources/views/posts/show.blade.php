@@ -7,9 +7,8 @@
 
     {{-- ======================================================================================== --}}
     <div class="w-100 p-4 d-flex align-items-center justify-content-center vh-100">
-
-        <div class="row row-cols-md-2">
-            <div>
+        <div class="row vh-100 w-100 ali">
+            <div class="col-md-7">
                 @if ($post->media->count() > 1)
                 <div id="carouselExampleIndicators" class="carousel slide">
                     <div class="carousel-indicators">
@@ -27,10 +26,10 @@
                                 @endphp
                                 @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
                                     <img src="{{ Storage::url($medium->media) }}" class="d-block post-image w-100"
-                                        style="object-fit: cover; max-height: 500px;min-height:300px" alt="...">
+                                        style="object-fit: cover; height: 600px;" alt="...">
                                 @elseif (in_array($extension, ['mp4', 'mov', 'avi', 'wmv']))
                                     <video class="d-block post-video w-100"
-                                        style="object-fit: cover; max-height: 500px;min-height:300px" autoplay muted loop>
+                                        style="object-fit: cover;height: 600px;" autoplay muted loop>
                                         <source src="{{ Storage::url($medium->media) }}" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
@@ -57,10 +56,10 @@
                     @endphp
                     @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
                         <img src="{{ Storage::url($post->media->first()->media) }}" class="d-block post-image w-100"
-                            style="object-fit: cover; max-height: 500px;min-height:300px" alt="...">
+                            style="object-fit: cover;height:600px" alt="...">
                     @elseif (in_array($extension, ['mp4', 'mov', 'avi', 'wmv']))
                         <video class="d-block post-video w-100"
-                            style="object-fit: cover; max-height: 500px;min-height:300px" autoplay muted loop>
+                            style="object-fit: cover; height:600px" autoplay muted loop>
                             <source src="{{ Storage::url($post->media->first()->media) }}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -68,8 +67,7 @@
                 </div>
                 @endif
             </div>
-
-            <div>
+            <div class="col-md-5">
                 <div class="post-header justify-content-between">
                     <div>
                         <a href="{{ route('users.show', $post->user->id) }}"class="text-decoration-none text-black">
