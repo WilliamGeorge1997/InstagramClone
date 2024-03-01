@@ -31,6 +31,7 @@ class PostController extends Controller
         return view('posts.index', ['posts' => $posts]);
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -159,7 +160,7 @@ class PostController extends Controller
             ->get();
         $posts = Post::with('user', 'media', 'tags')
             ->where('user_id', $id)
-            ->orderBy('timestamp', 'desc') // Assuming 'timestamp' is the name of the attribute
+            ->orderBy('timestamp', 'desc')
             ->get();
         return view('posts.profile', [
             'posts' => $posts
