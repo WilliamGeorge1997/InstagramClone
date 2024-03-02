@@ -31,12 +31,18 @@
                             <div class="form-floating mb-2">
                                 <input type="text" class="form-control" name="username" value="{{ $user->username }}">
                                 <label for="floatingSelect">User name</label>
+                                @error('username')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             {{-- ! email  --}}
                             <div class=" form-floating mb-2">
                                 <input type="email" class="form-control" name="email" value="{{ $user->email }}">
                                 <label for="floatingSelect">Email</label>
+                                @error('email')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             {{-- ! phone  --}}
@@ -50,7 +56,7 @@
                                 <input type="password" class="form-control" name="password">
                                 <label for="floatingSelect">Password</label>
                                 @if ($errors->has('password'))
-                                    <div class="alert alert-danger mt-2" role="alert">
+                                    <div class="text-danger" role="alert">
                                         {{ $errors->first('password') }}
                                     </div>
                                 @endif
