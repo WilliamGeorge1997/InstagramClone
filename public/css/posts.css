@@ -36,7 +36,11 @@ body {
     align-items: center;
     justify-content: center;
 }
+.dropdown-menu{min-width: 0;}
+.dropdown-toggle::after {
+    display:none;
 
+}
 .post-container {
     margin: 1.25rem auto;
 }

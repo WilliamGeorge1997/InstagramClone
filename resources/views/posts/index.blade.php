@@ -17,6 +17,7 @@
     @else
         @foreach ($posts as $post)
             <div class="container" id="postIndex">
+                <div class="d-flex justify-content-between ">
                 <a href="{{ route('users.show', $post->user->id) }}" class="text-decoration-none text-black">
                     <div class="post-header ">
                         <img loading="lazy" class="profile-pic"
@@ -25,6 +26,31 @@
                         <div class="username">{{ $post->user->username }}</div>
                     </div>
                 </a>
+                @if ($post->user->id === Auth::user()->id)
+                <div class="btn-group">
+                    <i type="button" class="fa-solid fa-ellipsis-vertical dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+
+                    </i>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="dropdown-item">
+                                <i class="fa-regular fa-pen-to-square text-black text-decoration-none"></i></a></li>
+
+                        <li>
+                            <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post"
+                                class="dropdown-item">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="border-0 p-0" style="background:none;">
+                                    <i
+                                        class="fa-regular fa-solid fa-trash fa-pen-to-square text-danger text-decoration-none"></i>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            @endif
+            </div>
                 <a href="{{ route('posts.show', ['post' => $post->id]) }}">
                     @if ($post->media->count() > 1)
                         <div id="carouselExampleIndicators_{{ $post->id }}" class="carousel slide">

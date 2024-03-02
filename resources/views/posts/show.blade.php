@@ -78,8 +78,28 @@
                         </a>
                     </div>
                     @if ($post->user->id === Auth::user()->id)
-                        <a href="{{ route('posts.edit', ['post' => $post->id]) }}">
-                            <i class="fa-regular fa-pen-to-square text-black text-decoration-none"></i></a>
+                        <div class="btn-group">
+                            <i type="button" class="fa-solid fa-ellipsis-vertical dropdown-toggle"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+
+                            </i>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="dropdown-item">
+                                        <i class="fa-regular fa-pen-to-square text-black text-decoration-none"></i></a></li>
+
+                                <li>
+                                    <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post"
+                                        class="dropdown-item">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="border-0 p-0" style="background:none;">
+                                            <i
+                                                class="fa-regular fa-solid fa-trash fa-pen-to-square text-danger text-decoration-none"></i>
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     @endif
                 </div>
                 <div class="post-caption">
@@ -148,8 +168,8 @@
                             @endauth
 
                             <label for="comment"> <span class="comment-btn"><svg aria-label="Comment"
-                                        class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img"
-                                        viewBox="0 0 24 24" width="24">
+                                        class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24"
+                                        role="img" viewBox="0 0 24 24" width="24">
 
                                         <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none"
                                             stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path>
