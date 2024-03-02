@@ -26,7 +26,7 @@
         }
 
         .loader img {
-            width: 70px; 
+            width: 70px;
             height: 70px;
         }
 
