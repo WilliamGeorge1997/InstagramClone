@@ -8,6 +8,7 @@ use App\Models\Block;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -28,21 +29,25 @@ class UserController extends Controller
     }
 
     public function search()
-    {
-        $searchQuery = request('search');
+{
+    $searchQuery = request('search');
 
-        if ($searchQuery) {
-            $users = User::where('username', 'like', '%' . $searchQuery . '%')
-                ->with('profiles')->get();
+    if ($searchQuery) {
+        $users = User::where('username', 'like', '%' . $searchQuery . '%')
+            ->whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('blocks')
+                    ->whereRaw('blocks.blocker_id = users.id OR blocks.blocked_id = users.id');
+            })
+            ->with('profiles')
+            ->get();
 
-            return view('users.search', ['users' => $users, 'searchQuery' => $searchQuery]);
-        } else {
-
-            $users = [];
-            return view('users.search', ['users' => $users]);
-        }
+        return view('users.search', ['users' => $users, 'searchQuery' => $searchQuery]);
+    } else {
+        $users = [];
+        return view('users.search', ['users' => $users]);
     }
-
+}
 
 
     /**

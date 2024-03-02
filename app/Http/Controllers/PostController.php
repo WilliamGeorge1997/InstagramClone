@@ -23,9 +23,14 @@ class PostController extends Controller
     public function index()
     {
         $authUser = auth()->user();
-        $user = User::find($authUser->id);
-        $followingUserIds = $user->followings()->pluck('followable_id');
-        $posts = Post::with(['user.profiles', 'media', 'tags', 'likes'])->whereIn('user_id', $followingUserIds)->orderBy('created_at', 'desc')->get();
+         $user = User::find($authUser->id);
+        $posts = Post::with(['user.profiles', 'media', 'tags', 'likes', 'comments'])
+        ->where(function ($query) use ($user) {
+        $query->whereIn('user_id', $user->followings()->pluck('followable_id'))
+              ->orWhere('user_id', $user->id);
+    })
+            ->orderBy('created_at', 'desc')
+            ->get();
 
 
         $lastThreeComments = [];
@@ -108,7 +113,7 @@ class PostController extends Controller
     {
         $user = Auth::user();
         $posts = Post::with('user', 'media', 'tags', 'likes', 'user.profiles', 'comments')->find($id);
-        $comments = Comment::where('post_id', $posts->id)->get();
+        $comments = Comment::where('post_id', $posts->id)->orderBy('created_at', 'desc')->get();
         return view('posts.show', ['post' => $posts, 'comments' => $comments, 'user' => $user]);
     }
     /**
