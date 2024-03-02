@@ -1,27 +1,19 @@
 @extends('layouts.profile')
-@section('title', 'Followers Users')
+@section('title', 'Follower Users')
 
 
 @section('content')
     @if ($followersCount > 0)
-        <div class="d-flex justify-content-lg-between my-4 border">
-            <h4>Followers Users</h4>
-            <h4>Followers Count: {{ $followersCount }}</h4>
+        <div class="d-flex justify-content-between my-1 mt-3 ">
+            <h2 class="fs-1 fw-bold">Follower Users</h2>
+            <h5 class="d-flex align-items-center mt-1">Followers Count {{ $followersCount }}</h5>
         </div>
+        <hr>
 
-    <table class="table border ">
-        <thead>
-
-            <th class="d-flex justify-content-start ps-5">User</th>
-            <th>Following</th>
-            <th>Block</th>
-        </thead>
+    <table class="table rounded">
         <tbody>
             @foreach($followersData as $followerData)
-
             <tr>
-
-
                 <td>
                     <div class="follower-container  d-flex ">
                         <a class="text-decoration-none" href="{{ route('users.show', $followerData->id) }}">
@@ -34,7 +26,6 @@
                             <p class="m-0 ">{{ $followerData->username }}</p>
                         </a>
                             </div>
-
                     </div>
                 </td>
                 <td>
@@ -44,7 +35,7 @@
                         <form action="{{ route('users.unfollow', $followerData->id) }}" method="post" class="d-inline">
                             @csrf
                             @method('delete')
-                            <button type="submit" class="btn btn-danger mt-1">Unfollow</button>
+                            <button type="submit" class="btn btn-danger mt-2">Unfollow</button>
                         </form>
                     @else
                         {{-- Follow/Follow Back button --}}
@@ -52,9 +43,9 @@
                             @csrf
 
                                 @if($followerData->isFollowing(auth()->user()))
-                                <button type="submit" class="btn btn-success mt-1">Follow Back</button>
+                                <button type="submit" class="btn btn-success mt-2">Follow Back</button>
                                 @else
-                                <button type="submit" class="btn btn-primary mt-1">Follow</button>
+                                <button type="submit" class="btn btn-primary mt-2">Follow</button>
 
                                 @endif
 
@@ -65,7 +56,7 @@
                             @if (auth()->check() && auth()->user()->id !== $followerData->id)
                                 <form method="POST" action="{{ route('users.block', $followerData->id) }}" class="mx-3">
                                     @csrf
-                                    <button type="submit" class="btn btn-danger px-4">Block</button>
+                                    <button type="submit" class="btn btn-danger mt-2  px-4">Block</button>
                                 </form>
                             @endif
                         </td>
