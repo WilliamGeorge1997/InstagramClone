@@ -136,8 +136,8 @@ class UserController extends Controller
                 'website' => $request->website,
                 'bio' => $request->bio,
             ]);
-            
-            
+
+
             User::where('id', $id)->update([
                 'email' => $request->email,
                 'username' => $request->username,
