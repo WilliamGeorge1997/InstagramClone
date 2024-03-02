@@ -92,7 +92,7 @@ class UserController extends Controller
         $profileInfo = Profile::where('user_id', $id)->get();
         $followController = app(FollowStatusController::class);
         $followCountData = $followController->followCount($user->id);
-        $posts = Post::with('user', 'media', 'tags', 'likes')
+        $posts = Post::with('user', 'media', 'tags','comments', 'likes')
             ->where('user_id', $id)
             ->orderBy('created_at', 'desc')->get();
         return view('users.userprofile', ['user' => $user, 'posts' => $posts, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
