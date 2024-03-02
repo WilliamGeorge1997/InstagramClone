@@ -41,6 +41,7 @@ Meet the talented individuals who contributed to this project:
 - `composer install`
 - `npm install`
 - `cp .env.example .env`
+- `php artisan migrate`
 - `php artisan storage:link`
 - `php artisan queue:work`
 - `php artisan key:generate`
