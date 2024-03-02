@@ -193,11 +193,11 @@
                                          style=" top: 5%; right: 5%;position:absolute;"></i></div>
                                  <div>
                                      <i class="fa-solid fa-heart m-2"></i><span>{{ $post->likes->count() }}</span>
-                                     <i class="fa-solid fa-comment m-2"></i><span>677</span>
+                                     <i class="fa-solid fa-comment ms-3 me-1"></i><span>{{$post->comments ?count($post->comments):0 }}</span>
                                  </div>
                              </div>
                          </div>
-
+                         
                      </div>
                  </a>
              @endforeach

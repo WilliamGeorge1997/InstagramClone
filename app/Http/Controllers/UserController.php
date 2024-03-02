@@ -120,6 +120,7 @@ class UserController extends Controller
                 'password' => 'nullable|string|min:8',
             ];
             $request->validate($rules);
+            $currentEmail = $user->email;
 
 
             if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
@@ -139,11 +140,20 @@ class UserController extends Controller
                 'email' => $request->email,
                 'username' => $request->username,
                 'phone' => $request->phone,
+                'email_verified_at' => null
             ]);
             if ($request-> filled('password')) {
                 User::where('id', $id)->update([
                     'password' => Hash::make($request->password),
                 ]);
+            }
+            if ($user->email !== $currentEmail) {
+                try {
+                    $user->sendEmailVerificationNotification();
+                } catch (\Exception $e) {
+                    $user->update(['email' => $currentEmail]);
+                    return back()->withErrors(['email' => 'Failed to send email verification.']);
+                }
             }
             return redirect()->route('users.show', auth()->id());
         }

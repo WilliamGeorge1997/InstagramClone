@@ -24,9 +24,14 @@ class SendEmailVerification implements ShouldQueue
 
     public function handle(): void
     {
+        $currentEmail = $this->user->email;
+
+        $this->user->refresh(); 
+
         if ($this->user instanceof MustVerifyEmail && !$this->user->hasVerifiedEmail()) {
-            $this->user->sendEmailVerificationQueuedNotification();
-            // $this->user->sendEmailVerificationNotification();
+            if ($this->user->email !== $currentEmail) { 
+                $this->user->sendEmailVerificationQueuedNotification();
+            }
         }
     }
 }
