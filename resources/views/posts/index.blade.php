@@ -112,10 +112,10 @@
                 </form>
                 @endif
                 @endauth
-                <label for="comment" class="comment-btn"><svg aria-label="Comment" class="x1lliihq x1n2onr6 x5n08af"
+                <label for="comment_{{ $post->id }}" class="comment-btn"><svg aria-label="Comment" class="x1lliihq x1n2onr6 x5n08af"
                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
                     width="24">
-                    
+
                     <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none"
                         stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path>
                 </svg></label>
@@ -236,7 +236,7 @@
                 <form action="{{ route('posts.comment.store', $post->id) }}" method="POST"
                     class="d-flex border-bottom">
                     @csrf
-                    <textarea name="body" placeholder="Add a comment..." class="comment bg-transparent p-1" id="comment" cols="1"
+                    <textarea name="body" placeholder="Add a comment..." class="comment bg-transparent p-1" id="comment_{{ $post->id }}" cols="1"
                         rows="1"></textarea>
                     <input type="hidden" name="post_id" value="{{ $post->id }}">
                     <input type="hidden" name="user_id" value="{{ $user->id }}">

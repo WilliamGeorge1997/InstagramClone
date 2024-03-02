@@ -26,8 +26,8 @@
         }
 
         .loader img {
-            width: 70px; /* Adjust the width as needed */
-            height: 70px; /* Adjust the height as needed */
+            width: 70px; 
+            height: 70px;
         }
 
         .content-container {
