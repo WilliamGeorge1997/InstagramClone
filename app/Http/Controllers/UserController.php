@@ -92,7 +92,7 @@ class UserController extends Controller
         $profileInfo = Profile::where('user_id', $id)->get();
         $followController = app(FollowStatusController::class);
         $followCountData = $followController->followCount($user->id);
-        $posts = Post::with('user', 'media', 'tags')
+        $posts = Post::with('user', 'media', 'tags', 'likes')
             ->where('user_id', $id)
             ->orderBy('created_at', 'desc')->get();
         return view('users.userprofile', ['user' => $user, 'posts' => $posts, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
@@ -122,6 +122,7 @@ class UserController extends Controller
                 'password' => 'nullable|string|min:8',
             ];
             $request->validate($rules);
+            $currentEmail = $user->email;
 
 
             if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
@@ -135,7 +136,8 @@ class UserController extends Controller
                 'website' => $request->website,
                 'bio' => $request->bio,
             ]);
-
+            
+            
             User::where('id', $id)->update([
                 'email' => $request->email,
                 'username' => $request->username,
@@ -147,11 +149,18 @@ class UserController extends Controller
                     'password' => Hash::make($request->password),
                 ]);
             }
-
-            $user->sendEmailVerificationNotification();
-
+            if ($user->email !== $currentEmail) {
+                try {
+                    $user->sendEmailVerificationNotification();
+                } catch (\Exception $e) {
+                    $user->update(['email' => $currentEmail]);
+                    return back()->withErrors(['email' => 'Failed to send email verification.']);
+                }
+            }
             return redirect()->route('users.show', auth()->id());
-        } else {
+        }
+        else
+        {
             return redirect()->route('users.show', auth()->id());
         }
     }

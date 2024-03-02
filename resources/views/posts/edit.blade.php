@@ -69,8 +69,8 @@
             <div class="col-md-5">
                 <div class="post-header justify-content-between">
                     <div> <img class="profile-pic"
-                            src="https://e0.pxfuel.com/wallpapers/41/351/desktop-wallpaper-kumpulan-luffy-smiling-luffy-smile.jpg "
-                            alt="Profile Picture">
+                        src="{{ $post->user->profiles->avatar? Storage::url($post->user->profiles->avatar) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' }}"
+                        alt="Profile Picture">
                         <span class="username">
                             {{ $post->user->username }}
                         </span>
