@@ -193,7 +193,7 @@ class PostController extends Controller
                 'post.media',
                 'post.user.profiles'
             ])
-            ->get();
+            ->orderBy('created_at', 'desc')->get();
 
         return view('saved_posts.index', compact('savedPosts', 'user',));
     }

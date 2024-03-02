@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+
 class SendEmailVerification implements ShouldQueue
 {
     protected $user;
@@ -24,9 +25,11 @@ class SendEmailVerification implements ShouldQueue
 
     public function handle(): void
     {
+
+
         if ($this->user instanceof MustVerifyEmail && !$this->user->hasVerifiedEmail()) {
-            $this->user->sendEmailVerificationQueuedNotification();
-            // $this->user->sendEmailVerificationNotification();
+                $this->user->sendEmailVerificationQueuedNotification();
+            }
         }
     }
-}
+

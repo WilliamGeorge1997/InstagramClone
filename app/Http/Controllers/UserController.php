@@ -8,7 +8,9 @@ use App\Models\Block;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
@@ -92,8 +94,7 @@ class UserController extends Controller
         $followCountData = $followController->followCount($user->id);
         $posts = Post::with('user', 'media', 'tags')
             ->where('user_id', $id)
-            ->orderBy('created_at', 'desc')->
-            get();
+            ->orderBy('created_at', 'desc')->get();
         return view('users.userprofile', ['user' => $user, 'posts' => $posts, 'profileInfo' => $profileInfo, 'followCountData' => $followCountData]);
     }
 
@@ -114,6 +115,7 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
         $user = User::find($id);
         if (auth()->id() == $user->id) {
             $rules = [
@@ -127,26 +129,29 @@ class UserController extends Controller
                 Profile::where('user_id', $id)->update([
                     'avatar' => $path
                 ]);
-                }
+            }
             Profile::where('user_id', $id)->update([
                 'gender' => $request->gender,
                 'website' => $request->website,
                 'bio' => $request->bio,
             ]);
-            
-            
+
             User::where('id', $id)->update([
                 'email' => $request->email,
                 'username' => $request->username,
                 'phone' => $request->phone,
+                'email_verified_at' => null
             ]);
-            if ($request-> filled('password')) {
+            if ($request->filled('password')) {
                 User::where('id', $id)->update([
                     'password' => Hash::make($request->password),
                 ]);
             }
+
+            $user->sendEmailVerificationNotification();
+
             return redirect()->route('users.show', auth()->id());
-        }else{
+        } else {
             return redirect()->route('users.show', auth()->id());
         }
     }
@@ -158,4 +163,6 @@ class UserController extends Controller
     {
         //
     }
+
+
 }

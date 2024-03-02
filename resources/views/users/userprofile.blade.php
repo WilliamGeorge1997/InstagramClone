@@ -86,6 +86,7 @@
      </section>
 
      <hr class="mt-3">
+     @if (auth()->user()->id == $user->id)
      <!-- ----------------------- Saved posts------------------------------------- -->
      <div class="container text-center mt-1">
 
@@ -103,8 +104,7 @@
                      x1="21" x2="3" y1="14.985" y2="14.985"></line>
              </svg> Posts
 
-
-             <a href="{{ route('posts.saved-posts') }}"  class="ms-3" style="text-decoration: none; color: black;">
+             <a href="{{ route('posts.saved-posts') }}" class="ms-3" style="text-decoration: none; color: black;">
                  <span class="save-btn">
                      <svg aria-label="Save" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24"
                          role="img" viewBox="0 0 24 24" width="24">
@@ -119,6 +119,8 @@
          <hr class="mt-3 w-50 mx-auto w-50">
      </div>
      <!-- --------------------The end of saved posts------------------------------- -->
+     @endif
+
 
      @if (count($posts) == 0)
          <div class="d-flex justify-content-center align-items-center w-100 h-100">
@@ -168,12 +170,13 @@
                      <div class="col ">
                          <div class="card border-0 position-relative post-disc ">
 
-         {{-- $extension = pathinfo($post->media->first()->media, PATHINFO_EXTENSION); --}}
+                             {{-- $extension = pathinfo($post->media->first()->media, PATHINFO_EXTENSION); --}}
 
-                             @if (in_array( pathinfo($post->media->first()->media, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif','webp']))
+                             @if (in_array(pathinfo($post->media->first()->media, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif', 'webp']))
                                  <img src="{{ Storage::url($post->media->first()->media) }}"
-                                     class="d-block post-image w-100" style="object-fit: cover;height:300px" alt="...">
-                             @elseif (in_array( pathinfo($post->media->first()->media, PATHINFO_EXTENSION), ['mp4', 'mov', 'avi', 'wmv']))
+                                     class="d-block post-image w-100" style="object-fit: cover;height:300px"
+                                     alt="...">
+                             @elseif (in_array(pathinfo($post->media->first()->media, PATHINFO_EXTENSION), ['mp4', 'mov', 'avi', 'wmv']))
                                  <video class="d-block post-image w-100" style="object-fit: cover; height:300px">
                                      <source src="{{ Storage::url($post->media->first()->media) }}" type="video/mp4">
                                      Your browser does not support the video tag.
@@ -183,9 +186,9 @@
                                  class="position-absolute gap-2 d-flex align-items-center justify-content-center text-white">
                                  <div><i class="
                                     @if ($post->media->count() > 1) fa-images fa-regular
-                                    @elseif (in_array( pathinfo($post->media->first()->media, PATHINFO_EXTENSION),  ['mp4', 'mov', 'avi', 'wmv']))
+                                    @elseif (in_array(pathinfo($post->media->first()->media, PATHINFO_EXTENSION), ['mp4', 'mov', 'avi', 'wmv']))
                                     fa-solid fa-clapperboard
-                                    @elseif (in_array( pathinfo($post->media->first()->media, PATHINFO_EXTENSION),  ['jpg', 'jpeg', 'png', 'gif']))
+                                    @elseif (in_array(pathinfo($post->media->first()->media, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
                                      fa-regular
                                        fa-image @endif
                                     "
@@ -202,4 +205,6 @@
              @endforeach
          </div>
      @endif
+
+
  @endsection

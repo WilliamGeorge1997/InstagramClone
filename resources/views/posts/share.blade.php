@@ -33,7 +33,7 @@
                                     @endif
                                 </div>
                                 <input type="hidden" name="param{{ $key }}" value="{{ $medium }}">
-                                {{dd($medium)}}
+       
                             @endforeach
                         </div>
 
