@@ -60,8 +60,7 @@ Route::get('/users/{id}/followers', [FollowStatusController::class, 'followerUse
 Route::get('/users/{id}/followings', [FollowStatusController::class, 'followingUsers'])->name('users.followings');
 Route::get('/users/{id}/followers', [FollowStatusController::class, 'followerUsers'])->name('users.followers');
 
-Route::post('/posts/{post}/like', [LikeController::class, 'likePost'])->name('posts.like');
-Route::delete('/posts/{post}/unlike', [LikeController::class, 'unlikePost'])->name('posts.unlike');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/users/{user}/follow', [FollowStatusController::class, 'followUser'])->name('users.follow');
@@ -69,6 +68,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('users/{id}/block', [BlockController::class, 'blockUser'])->name('users.block');
     Route::get('users/{id}/blocked', [BlockController::class, 'showBlockedUsers'])->name('users.blocked');
     Route::DELETE('users/{id}/unblock', [BlockController::class, 'unblockUser'])->name('users.unblock');
+
+
+    // -------------------------- Likes ----------------------------
+
+    Route::post('/posts/{post}/like', [LikeController::class, 'likePost'])->name('posts.like');
+    Route::delete('/posts/{post}/unlike', [LikeController::class, 'unlikePost'])->name('posts.unlike');
+    Route::post('/comments/{comment}/like', [LikeController::class, 'likeComment'])->name('comments.like');
+    Route::delete('/comments/{comment}/unlike', [LikeController::class, 'unlikeComment'])->name('comments.unlike');
 
     // -------------------------- Comments ----------------------------
     // comments for posts

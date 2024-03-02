@@ -9,7 +9,7 @@
         <form action="{{ route('posts.store') }}" method="POST" class="row row-cols-md-2 vh-100 w-100">
             @csrf
             <div class="col-md-7">
-                
+
                 @if (count($paths) > 1)
                     <div id="carouselExampleIndicators" class="carousel slide">
                         <div class="carousel-indicators">
@@ -33,7 +33,6 @@
                                     @endif
                                 </div>
                                 <input type="hidden" name="param{{ $key }}" value="{{ $medium }}">
-                                {{dd($medium)}}
                             @endforeach
                         </div>
 
@@ -67,7 +66,7 @@
             <div class="col-md-5">
                 <div class="post-header justify-content-between">
                     <div> <img class="profile-pic"
-                            src="https://e0.pxfuel.com/wallpapers/41/351/desktop-wallpaper-kumpulan-luffy-smiling-luffy-smile.jpg "
+                            src="{{ $user->profiles->avatar? Storage::url($user->profiles->avatar) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' }}"
                             alt="Profile Picture">
                         <span class="username">
                             {{ Auth::user()->username }}

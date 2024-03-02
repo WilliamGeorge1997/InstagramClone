@@ -24,13 +24,14 @@ class PostController extends Controller
     {
         $authUser = auth()->user();
          $user = User::find($authUser->id);
-        $posts = Post::with(['user.profiles', 'media', 'tags', 'likes'])
+        $posts = Post::with(['user.profiles', 'media', 'tags', 'likes', 'comments'])
         ->where(function ($query) use ($user) {
         $query->whereIn('user_id', $user->followings()->pluck('followable_id'))
               ->orWhere('user_id', $user->id);
     })
             ->orderBy('created_at', 'desc')
             ->get();
+
 
         $user = Auth::user();
         $postsAll = Post::with('user.profiles', 'media', 'tags', 'likes', 'comments')->get();
@@ -68,8 +69,9 @@ class PostController extends Controller
             }
         };
         $request->session()->put('paths', $paths);
-
-        return view('posts.share', ['paths' => $paths]);
+        $authUser = auth()->user();
+        $user = User::with('profiles')->find($authUser->id);
+        return view('posts.share', ['paths' => $paths , 'user' => $user]);
     }
 
     /**
@@ -112,7 +114,7 @@ class PostController extends Controller
     public function show(string $id)
     {
         $user = Auth::user();
-        $posts = Post::with('user', 'media', 'tags' , 'likes', 'user.profiles')->find($id);
+        $posts = Post::with('user', 'media', 'tags' , 'likes', 'user.profiles', 'comments')->find($id);
         $comments = Comment::where('post_id', $posts->id)->get();
         return view('posts.show', ['post' => $posts, 'comments' => $comments, 'user' => $user]);
     }
@@ -121,7 +123,7 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        $posts = Post::with('user', 'media', 'tags')->find($id);
+        $posts = Post::with('user.profiles', 'media', 'tags')->find($id);
         return view('posts.edit', ['post' => $posts]);
     }
     /**
