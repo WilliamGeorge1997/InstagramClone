@@ -121,7 +121,7 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        $posts = Post::with('user.profiles', 'media', 'tags')->find($id);
+        $posts = Post::with('user.profiles', 'media', 'tags', 'likes','comments')->find($id);
         return view('posts.edit', ['post' => $posts]);
     }
     /**
@@ -144,7 +144,10 @@ class PostController extends Controller
         $post->update([
             "caption" => $tagCaption == [""] ? null :  $request->tag_caption,
         ]);
-        return view('posts.show', ['post' => $post]);
+        $user = Auth::user();
+        $post = Post::with('user', 'media', 'tags', 'likes', 'user.profiles', 'comments')->find($post->id);
+        $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->get();
+        return view('posts.show', ['post' => $post, 'comments' => $comments, 'user' => $user]);
     }
 
     /**
@@ -152,7 +155,8 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Post::find($id)->delete();
+        return redirect()->route('posts.index');
     }
 
     public function tag(string $id)
