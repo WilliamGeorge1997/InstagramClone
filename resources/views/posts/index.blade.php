@@ -9,8 +9,8 @@
     @if ($posts->isEmpty())
 
         <div class="newuser-container d-flex flex-column align-items-center mt-5 pt-5">
-            <h2>Welcome to the InstagramClone</h2>
-            <h3>Create your first post or Search and Follow new users to see new posts.</h3>
+            <h2>Welcome to InstagramClone</h2>
+            <h3>Create your first post or search and follow new users to see new posts.</h3>
             <img loading="lazy" class="mt-2" src="https://seeklogo.com/images/I/instagram-logo-1494D6FE63-seeklogo.com.png" width="50px"
                 height="50px" alt="Instagram Logo">
         </div>

@@ -1,3 +1,7 @@
+<title>Email Verification</title>
+<link href="https://db.onlinewebfonts.com/c/6d32b8e06f40fb7698cfb714b9e7975d?family=Billabong+W00+Regular"
+        rel="stylesheet">
+    <link rel="shortcut icon" href="https://seeklogo.com/images/I/instagram-logo-1494D6FE63-seeklogo.com.png" type="image/x-icon">
 <x-guest-layout>
     <div class="mb-4 text-sm text-gray-600">
         {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
