@@ -17,7 +17,7 @@
     @else
         @foreach ($posts as $post)
             <div class="container" id="postIndex">
-                <div class="d-flex justify-content-between ">
+                <div class="d-flex justify-content-between align-items-center">
                 <a href="{{ route('users.show', $post->user->id) }}" class="text-decoration-none text-black">
                     <div class="post-header ">
                         <img loading="lazy" class="profile-pic"
