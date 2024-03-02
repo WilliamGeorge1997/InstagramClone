@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Block;
 use App\Models\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -124,9 +125,17 @@ class UserController extends Controller
         $user = User::find($id);
         if (auth()->id() == $user->id) {
             $rules = [
+                'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
+                'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
                 'password' => 'nullable|string|min:8',
             ];
-            $request->validate($rules);
+
+            $messages = [
+                'username.unique' => 'The username has already been taken.',
+                'email.unique' => 'The email has already been taken.',
+            ];
+
+            $request->validate($rules, $messages);
             $currentEmail = $user->email;
 
 
@@ -143,11 +152,23 @@ class UserController extends Controller
             ]);
 
 
+            if ($request->filled('email') && $request->email !== $currentEmail) {
+                User::where('id', $id)->update([
+                    'email' => $request->email,
+                    'email_verified_at' => null
+                ]);
+            }
+
+            if ($request->filled('username')) {
+                User::where('id', $id)->update([
+                    'username' => $request->username,
+                    
+                ]);
+            }
+
             User::where('id', $id)->update([
-                'email' => $request->email,
-                'username' => $request->username,
                 'phone' => $request->phone,
-                'email_verified_at' => null
+                
             ]);
             if ($request->filled('password')) {
                 User::where('id', $id)->update([

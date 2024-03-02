@@ -1,3 +1,7 @@
+<title>Forget Password</title>
+<link href="https://db.onlinewebfonts.com/c/6d32b8e06f40fb7698cfb714b9e7975d?family=Billabong+W00+Regular"
+        rel="stylesheet">
+    <link rel="shortcut icon" href="https://seeklogo.com/images/I/instagram-logo-1494D6FE63-seeklogo.com.png" type="image/x-icon">
 <x-guest-layout>
     <div class="mb-4 text-sm text-gray-600">
         {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
