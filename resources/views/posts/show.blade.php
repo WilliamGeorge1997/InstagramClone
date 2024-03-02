@@ -316,6 +316,7 @@
                                         <small class="text-muted ">{{ $comment->timeAgo }}</small>
 
                                         <!-- ---------------------Delete comment-------------------------------- -->
+                                        @if (auth()->check() && auth()->user()->id == $comment->user_id)
 
                                         <form method="POST" action="{{ route('posts.comment.destroy', $comment->id) }}"
                                             class="m-0">
@@ -326,6 +327,7 @@
                                                 <i class="fa-solid fa-trash"></i>
                                             </button>
                                         </form>
+                                        @endif
 
 
                                     </div>
