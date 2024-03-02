@@ -42,6 +42,7 @@ Meet the talented individuals who contributed to this project:
 - `npm install`
 - `cp .env.example .env`
 - `php artisan storage:link`
+- `php artisan queue:work`
 - `php artisan key:generate`
 - `npm run dev`
 - `php artisan serve`

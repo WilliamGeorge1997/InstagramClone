@@ -39,7 +39,6 @@ body {
 
 .post-container {
     margin: 1.25rem auto;
-
 }
 
 .post-header {
@@ -66,15 +65,14 @@ body {
 }
 
 .post-caption {
-    padding: 0.625rem;
     text-align: left;
 }
 .comments * {
     padding: 0;
     margin: 0;
-  }
+}
 .likes-comments {
-    padding: 0.625rem;
+    
     border-top: 0.0625rem solid #ddd;
 }
 
@@ -103,4 +101,3 @@ body {
 .comment-container {
     padding: 0.625rem;
 }
-
