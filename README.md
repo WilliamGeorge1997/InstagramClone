@@ -48,9 +48,10 @@ Meet the talented individuals who contributed to this project:
 - `php artisan serve`
 
 ## Usage
-
-1.  Register for a new account or log in if you already have one.
-2.  Explore the Instagram clone functionalities such as posting images, liking, commenting, and following other users.
+1.  Register for a new account.
+2.  Verify email using https://mailtrap.io/ using Email: gram28319@gmail.com & Password: instagramClone123 
+3.  Log in with your new account.
+4.  Explore the Instagram clone functionalities such as posting images, liking, commenting, and following other users.
 
 ## Features
 
