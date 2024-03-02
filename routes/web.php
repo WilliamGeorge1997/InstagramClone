@@ -48,9 +48,6 @@ Route::resource('posts', PostController::class);
 
 
 
-
-
-
 Route::resource('users', UserController::class);
 
 
@@ -98,6 +95,8 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/search', [UserController::class, 'search'])->name('users.search');
 
 require __DIR__ . '/auth.php';
+
+
 
 Route::middleware(['web', 'auth', 'verified'])->group(function () {
     Route::post('/update-email', [UserController::class, 'updateEmail'])->name('update.email');
