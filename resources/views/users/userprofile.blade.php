@@ -83,7 +83,7 @@
                  <p class="m-0 text-start">{{ $profileInfo->first()->gender ? $profileInfo->first()->gender : '' }}</p>
              </div>
          </div>
-      
+
      </section>
 
      <hr class="mt-3">
@@ -170,10 +170,7 @@
                  <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="m-0 p-1">
                      <div class="col ">
                          <div class="card border-0 position-relative post-disc ">
-
-                             {{-- $extension = pathinfo($post->media->first()->media, PATHINFO_EXTENSION); --}}
-
-                             @if (in_array(pathinfo($post->media->first()->media, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif', 'webp']))
+                             @if (in_array( pathinfo($post->media->first()->media, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif','webp']))
                                  <img src="{{ Storage::url($post->media->first()->media) }}"
                                      class="d-block post-image w-100" style="object-fit: cover;height:300px"
                                      alt="...">
@@ -200,7 +197,7 @@
                                  </div>
                              </div>
                          </div>
-                         
+
                      </div>
                  </a>
              @endforeach
