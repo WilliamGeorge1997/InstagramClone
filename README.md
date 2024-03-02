@@ -1,66 +1,126 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Instagram Clone Project
 
-## About Laravel
+## Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This project is a feature-rich Instagram clone developed using Laravel 10, encompassing essential Laravel components such as migrations, Blade templates, controllers, models, routes, ORM (Eloquent), and Breeze for authentication. Furthermore, the Overtrue/Laravel-Follow and Overtrue/Laravel-Like packages have been seamlessly integrated to enhance the follow and like functionalities.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Team Members
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Meet the talented individuals who contributed to this project:
 
-## Learning Laravel
+- [William George](https://www.linkedin.com/in/williamgeorge97/)
+- [Ahmed Sobhi](https://www.linkedin.com/in/ahmeds0bhi)
+- [Neamatullah Mustafa](https://www.linkedin.com/in/neamatullah-abo-lila-b325a9203?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+- [Nada Saeed](https://www.linkedin.com/in/nada-said-81ab31220?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+- [MennaTullah Ashraf](https://www.linkedin.com/in/mennatallahashraf?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app)
+- [Sara Eldabaa](https://www.linkedin.com/in/sarah-e-6b45a810a/)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Table of Contents
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- [Installation](#installation)
+- [Features](#features)
+- [Usage](#usage)
+  - [1. User Authentication and Authorization](#1-user-authentication-and-authorization)
+  - [2. Post Management](#2-post-management)
+  - [3. Interactive Features](#3-interactive-features)
+  - [4. Media Support](#4-media-support)
+  - [5. User Profiles](#5-user-profiles)
+  - [6. Follow System](#6-follow-system)
+  - [7. Blocking Feature](#7-blocking-feature)
+  - [8. Editable User Data](#8-editable-user-data)
+  - [9. Editable Posts](#9-editable-posts)
+  - [10. Tagging System](#10-tagging-system)
+- [Contributing](#contributing)
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- `git clone https://github.com/WilliamGeorge1997/InstagramClone.git`
+- `cd InstagramClone`
+- `composer install`
+- `npm install`
+- `cp .env.example .env`
+- `php artisan storage:link`
+- `php artisan key:generate`
+- `npm run dev`
+- `php artisan serve`
 
-### Premium Partners
+## Usage
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+1.  Register for a new account or log in if you already have one.
+2.  Explore the Instagram clone functionalities such as posting images, liking, commenting, and following other users.
+
+## Features
+
+### 1. User Authentication and Authorization
+
+- **Secure Authentication:**
+  - Utilizes Laravel Breeze for secure user registration and authentication.
+  - Users can register, log in, and log out with ease.
+
+- **Authorization:**
+  - Implements access control to ensure users can only edit their own data and posts.
+
+### 2. Post Management
+
+- **Create, Edit, and Delete:**
+  - Users can create, edit, and delete their posts.
+  - Editable posts ensure users can refine their content over time.
+
+- **Rich Content Support:**
+  - Posts can include a mix of images and videos for a dynamic user experience.
+
+### 3. Interactive Features
+
+- **Like and Unlike:**
+  - Users can like and unlike posts seamlessly using the Overtrue/Laravel-Like package.
+  - Liked posts are highlighted, providing instant feedback to users.
+
+- **Commenting:**
+  - Allows users to leave comments on posts, fostering engagement and interaction.
+
+- **Save Post for Later:**
+  - Users can save posts for later viewing.
+
+### 4. Media Support
+
+- **Image and Video Uploads:**
+  - Posts support both images and videos, enabling a multimedia-rich environment.
+
+### 5. User Profiles
+
+- **Personalized Profiles:**
+  - Each user has a dedicated profile page showcasing their avatar, username, full name, bio, gender and additional details.
+
+### 6. Follow System
+
+- **Follow and Unfollow:**
+  - Utilizes Overtrue/Laravel-Follow for implementing a seamless follow system.
+  - Users can follow and unfollow each other easily.
+
+### 7. Blocking Feature
+
+- **User Blocking:**
+  - Users can block each other to prevent interaction and content visibility.
+  - Blocked users' content is hidden from the blocker's timeline.
+
+### 8. Editable User Data
+
+- **Profile Information Editing:**
+  - Users can edit their gender, email, phone, avatar, username, bio, and password.
+
+### 9. Editable Posts
+
+- **Post Content Editing:**
+  - Users can edit the caption of their own posts, allowing for corrections or updates.
+
+### 10. Tagging System
+
+- **Tagging Posts:**
+  - Posts can be tagged with relevant keywords or topics.
+  - A dedicated tag page displays posts related to specific tags, enhancing content discovery.
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+We welcome contributions! If you have any ideas, bug fixes, or improvements, please open an issue or submit a pull request.
