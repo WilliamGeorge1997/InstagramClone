@@ -82,85 +82,10 @@
                             <i class="fa-regular fa-pen-to-square text-black text-decoration-none"></i></a>
                     @endif
                 </div>
-               <!--  --------------------- ---The comment section-------------------------------------  -->
-                <div class="post-comments-container mt-3" style="max-height: 300px; overflow-y: auto;">
-                    @foreach ($comments as $comment)
-                        <div class="container mt-3">
-                            <ul class="list-unstyled">
-                                <li class="d-flex flex-column mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <!-- --------------profile picture--------------- -->
-                                        <div class="profile-picture me-3">
-                                            <img src="{{ $comment->users->profiles->avatar ? Storage::url($comment->users->profiles->avatar) : url('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png') }}"
-                                                alt="Profile Picture" class="img-fluid rounded-circle"
-                                                style="width: 32px; height: 32px;">
-                                        </div>
-
-                                        <!-- ------------------------Username---------------------- -->
-                                        <div>
-                                            <h5 class="mb-0">
-                                                <a
-                                                    href="{{ route('users.show', ['user' => $comment->user_id]) }}">{{ $comment->users->username }}</a>
-                                            </h5>
-                                        </div>
-
-                                    </div>
-
-                                    <!-- ----------------------The comment body----------------------------- -->
-                                    <div class="mb-2">
-                                        <p class="mb-0">{{ $comment->body }}</p>
-                                    </div>
-
-                                    <div class="d-flex align-items-center justify-content-between">
-
-                                        <small class="text-muted">{{ $comment->timeAgo }}</small>
-
-                                        <!-- ---------------------Delete comment-------------------------------- -->
-
-                                        <form method="POST" action="{{ route('posts.comment.destroy', $comment->id) }}"
-                                            class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-link btn-sm text-danger p-0"
-                                                style="text-decoration: none;">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 24 24" stroke="currentColor" width="16"
-                                                    height="16">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M3 6L5 6 21 6"></path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M9 6V3a1 1 0 011-1h4a1 1 0 011 1v3"></path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M16 10v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8m2 0h12m-2 0v-4a1 1 0 00-1-1h-2a1 1 0 00-1 1v4">
-                                                    </path>
-                                                </svg>
-                                            </button>
-                                        </form>
-
-
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    @endforeach
-                </div>
-
-                <!-- ---------------------Store comment-------------------------------- -->
-                <form action="{{ route('posts.comment.store', $post->id) }}" method="POST"
-                    class="comment-container d-flex">
-                    @csrf
-                    <textarea name="body" placeholder="Add a comment..." class="comment p-1" id="comment" cols="1"
-                        rows="1"></textarea>
-                    <input type="hidden" name="post_id" value="{{ $post->id }}">
-                    <input type="hidden" name="user_id" value="{{ $user->id }}">
-                    <button class="btn text-primary" type="submit">Post</button>
-                </form>
-
-                <div class="likes-comments">
+                <div class="likes-comments p-0 m-0">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex">
-
-                            <form action="" method=""><span class="like-btn"><svg aria-label="Like"
+                            <form action="" method="" class="mb-0"><span class="like-btn"><svg aria-label="Like"
                                         class="x1lliihq x1n2onr6 xyb1xck" fill="currentColor" height="24" role="img"
                                         viewBox="0 0 24 24" width="24">
                                         <title>Like</title>
@@ -169,8 +94,6 @@
                                         </path>
                                     </svg></span>
                             </form>
-
-
                         </div>
                         <!-- -------------------Save post section-------------------- -->
                         @auth
@@ -196,7 +119,7 @@
                             @else
                                 <!--  --------- The user has not save the post before , show save button ----------- -->
                                 <form action="{{ route('saved.posts.store', ['id' => $post->id]) }}" method="post"
-                                    id="saveForm{{ $post->id }}">
+                                    id="saveForm{{ $post->id }}"  class="mb-0">
                                     <input type="hidden" name="post_id" value="{{ $post->id }}">
                                     <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                     @csrf
@@ -237,12 +160,66 @@
                             {{ $word }}
                         @endif
                     @endforeach
-
                 </div>
+          <!--  --------------------- ---The comment section-------------------------------------  -->
+                <div class="comments mt-3" style="max-height: 300px; overflow-y: auto;">
+                    @foreach ($comments as $comment)
+                        <div class="container mt-3">
+                            <ul class="list-unstyled">
+                                <li class="d-flex flex-column ">
+                                    <div class="d-flex align-items-center">
+                                        <!-- --------------profile picture--------------- -->
+                                        <div class="me-2 p-0">
+                                            <img src="{{ $comment->users->profiles->avatar ? Storage::url($comment->users->profiles->avatar) : url('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png') }}"
+                                                alt="Profile Picture" class="img-fluid rounded-circle"
+                                                style="width: 25px; height: 25px;">
+                                        </div>
+                                        <!-- ------------------------Username---------------------- -->
+                                            <h6 class="mb-0">
+                                                <a class="text-black text-decoration-none"
+                                                    href="{{ route('users.show', ['user' => $comment->user_id]) }}">{{ $comment->users->username }}</a>
+                                            </h6>
+                                    </div>
 
+                                    <!-- ----------------------The comment body----------------------------- -->
+
+                                        <p class="mb-0">{{ $comment->body }}</p>
+
+
+                                    <div class="d-flex align-items-center justify-content-between">
+
+                                        <small class="text-muted">{{ $comment->timeAgo }}</small>
+
+                                        <!-- ---------------------Delete comment-------------------------------- -->
+
+                                        <form method="POST" action="{{ route('posts.comment.destroy', $comment->id) }}"
+                                            class="m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn d-flex align-items-center  btn-link btn-sm text-danger p-0"
+                                              >
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    @endforeach
+                </div>
+                <!-- ---------------------Store comment-------------------------------- -->
+                <form action="{{ route('posts.comment.store', $post->id) }}" method="POST"
+                    class="d-flex border-bottom">
+                    @csrf
+                    <textarea name="body" placeholder="Add a comment..." class="comment bg-transparent p-1" id="comment" cols="1"
+                        rows="1"></textarea>
+                    <input type="hidden" name="post_id" value="{{ $post->id }}">
+                    <input type="hidden" name="user_id" value="{{ $user->id }}">
+                    <button class="btn text-primary" type="submit">Post</button>
+                </form>
             </div>
         </div>
-
     </div>
-
 @endsection

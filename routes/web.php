@@ -40,8 +40,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('posts/{tag}/tagPage', [PostController::class, 'tag'])->name('posts.tag');
 Route::get('posts/{id}/user', [PostController::class, 'postsByUserId'])->name('posts.profile');
-
-// Route::post('/share', [PostController::class, 'share'])->name('share');
 Route::match(['get', 'post'], 'share', [PostController::class, 'share'])->name('posts.share');
 
 Route::resource('posts', PostController::class);

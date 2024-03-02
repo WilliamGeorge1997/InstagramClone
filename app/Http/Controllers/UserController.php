@@ -90,7 +90,7 @@ class UserController extends Controller
         $profileInfo = Profile::where('user_id', $id)->get();
         $followController = app(FollowStatusController::class);
         $followCountData = $followController->followCount($user->id);
-        $posts = Post::with('user', 'media', 'tags')
+        $posts = Post::with('user', 'media', 'tags','comments')
             ->where('user_id', $id)
             ->orderBy('created_at', 'desc')->
             get();
@@ -133,8 +133,8 @@ class UserController extends Controller
                 'website' => $request->website,
                 'bio' => $request->bio,
             ]);
-            
-            
+
+
             User::where('id', $id)->update([
                 'email' => $request->email,
                 'username' => $request->username,

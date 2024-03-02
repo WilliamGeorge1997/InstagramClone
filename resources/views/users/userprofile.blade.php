@@ -167,9 +167,6 @@
                  <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="m-0 p-1">
                      <div class="col ">
                          <div class="card border-0 position-relative post-disc ">
-
-         {{-- $extension = pathinfo($post->media->first()->media, PATHINFO_EXTENSION); --}}
-
                              @if (in_array( pathinfo($post->media->first()->media, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif','webp']))
                                  <img src="{{ Storage::url($post->media->first()->media) }}"
                                      class="d-block post-image w-100" style="object-fit: cover;height:300px" alt="...">
@@ -190,10 +187,10 @@
                                        fa-image @endif
                                     "
                                          style=" top: 5%; right: 5%;position:absolute;"></i></div>
-                                 <div>
-                                     <i class="fa-solid fa-heart m-2"></i><span>344</span>
-                                     <i class="fa-solid fa-comment m-2"></i><span>677</span>
-                                 </div>
+                                         <div>
+                                            <i class="fa-solid fa-heart me-1"></i><span>344</span>
+                                            <i class="fa-solid fa-comment ms-3 me-1"></i><span>{{$post->comments ?count($post->comments):0 }}</span>
+                                        </div>
                              </div>
                          </div>
 
