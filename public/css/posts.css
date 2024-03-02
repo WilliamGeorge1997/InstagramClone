@@ -3,7 +3,6 @@
     align-items: center;
     background-color: #f7f7f7;
 }
-/* body{background-color: #000;} */
 .profile-picture {
     width: 2.5rem;
     height: 2.5rem;
@@ -40,22 +39,14 @@ body {
 
 .post-container {
     margin: 1.25rem auto;
-    /* border: 0.0625rem solid #ddd;
-    background-color: #fff; */
-    /* box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1); */
+
 }
 
 .post-header {
     padding: 0.625rem;
     display: flex;
     align-items: center;
-    border-bottom: 0.0625rem solid #ddd;
 }
-
-/* .carousel-item.active ,.carousel-item{
-    min-height: 50%;
-    max-height: 75%;
-} */
 
 .profile-pic {
     width: 2.5rem;
@@ -78,7 +69,10 @@ body {
     padding: 0.625rem;
     text-align: left;
 }
-
+.comments * {
+    padding: 0;
+    margin: 0;
+  }
 .likes-comments {
     padding: 0.625rem;
     border-top: 0.0625rem solid #ddd;
@@ -94,7 +88,6 @@ body {
 
 .likes {
     text-align: left;
-    padding: 10px 10px 0px 10px;
 }
 
 .comment {
