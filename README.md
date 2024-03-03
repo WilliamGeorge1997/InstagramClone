@@ -5,6 +5,11 @@
 
 This project is a feature-rich Instagram clone developed using Laravel 10, encompassing essential Laravel components such as migrations, Blade templates, controllers, models, routes, ORM (Eloquent), and Breeze for authentication. Furthermore, the Overtrue/Laravel-Follow and Overtrue/Laravel-Like packages have been seamlessly integrated to enhance the follow and like functionalities.
 
+## Demo Video
+
+https://github.com/WilliamGeorge1997/InstagramClone/assets/117861843/666132fc-58bf-4132-8a51-24fda6bc9b1a
+
+
 ## Team Members
 
 Meet the talented individuals who contributed to this project:
